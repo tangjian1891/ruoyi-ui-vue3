@@ -111,15 +111,11 @@ getCookie();
 
 async function getCode() {
   let res: any = await getCodeImg()
-  console.log(res)
-  res = {
-    data: res
-  }
   captchaOnOff.value = res.data.captchaOnOff === undefined ? true : res.data.captchaOnOff;
   if (captchaOnOff) {
     codeUrl.value = "data:image/gif;base64," + res.data.img;
     console.log(loginForm)
-    console.log( loginForm.uuid)
+    console.log(loginForm.uuid)
     loginForm.value.uuid = res.data.uuid;
   }
 }
@@ -128,33 +124,38 @@ function getCookie() {
   const password = Cookies.get("password");
   const rememberMe = Cookies.get('rememberMe')
   loginForm.value = {
-    username: username === undefined ? loginForm.username : username,
-    password: password === undefined ? loginForm.password : decrypt(password),
+    username: username === undefined ? loginForm.value.username : username,
+    password: password === undefined ? loginForm.value.password : decrypt(password),
     rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
   };
 }
 
 function handleLogin() {
-  loginFormRef.value.validate((valid: boolean) => {
+  loginFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
+      console.log("都有填写", valid)
       loading.value = true;
+      console.log(encrypt)
+
       if (loginForm.value.rememberMe) {
-        Cookies.set("username", loginForm.username.value, { expires: 30 });
-        Cookies.set("password", encrypt(loginForm.password.value), { expires: 30 });
-        Cookies.set('rememberMe', loginForm.rememberMe.vaalue, { expires: 30 });
+        Cookies.set("username", loginForm.value.username, { expires: 30 });
+        Cookies.set("password", encrypt(loginForm.value.password), { expires: 30 });
+        Cookies.set('rememberMe', loginForm.value.rememberMe, { expires: 30 });
       } else {
         Cookies.remove("username");
         Cookies.remove("password");
         Cookies.remove('rememberMe');
       }
-      store.dispatch("Login", data.loginForm).then(() => {
+      try {
+        await store.dispatch("Login", data.loginForm)
+        console.log("准备跳转", redirect.value || "/")
         router.push({ path: redirect.value || "/" })
-      }).catch(() => {
+      } catch (error) {
         loading.value = false;
         if (captchaOnOff.value) {
           getCode();
         }
-      });
+      }
     }
   });
 }

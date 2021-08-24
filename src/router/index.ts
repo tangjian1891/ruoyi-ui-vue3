@@ -3,21 +3,23 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 // interface MyRouteRecordRaw extends RouteRecordRaw{
 //   hidden?:boolean
 // }
+/* Layout */
+import Layout from "@/layout/index.vue";
 type MyRouteRecordRaw = RouteRecordRaw & {
   hidden?: boolean;
 };
 export const constantRoutes: Array<MyRouteRecordRaw> = [
-  // {
-  //   path: '/redirect',
-  //   component: Layout,
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: '/redirect/:path(.*)',
-  //       component: (resolve) => require(['@/views/redirect'], resolve)
-  //     }
-  //   ]
-  // },
+  {
+    path: "/redirect",
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: "/redirect/:path(.*)",
+        component: () => import("@/views/redirect.vue"),
+      },
+    ],
+  },
   {
     path: "/",
     redirect: "/login",
@@ -42,19 +44,19 @@ export const constantRoutes: Array<MyRouteRecordRaw> = [
   //   component: (resolve) => require(['@/views/error/401'], resolve),
   //   hidden: true
   // },
-  // {
-  //   path: '',
-  //   component: Layout,
-  //   redirect: 'index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: (resolve) => require(['@/views/index'], resolve),
-  //       name: 'Index',
-  //       meta: { title: '首页', icon: 'dashboard', affix: true }
-  //     }
-  //   ]
-  // },
+  {
+    path: '',
+    component: Layout,
+    redirect: 'index',
+    children: [
+      {
+        path: 'index',
+        component:  ()=>import('@/views/index.vue'),
+        name: 'Index',
+        meta: { title: '首页', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
   // {
   //   path: '/user',
   //   component: Layout,
@@ -151,7 +153,7 @@ export const constantRoutes: Array<MyRouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes:constantRoutes,
+  routes: constantRoutes,
 });
 
 export default router;

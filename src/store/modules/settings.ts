@@ -31,8 +31,9 @@ const actions = {
     commit("CHANGE_SETTING", data);
   },
   // 设置网页标题
-  setTitle({ commit }, title) {
-    state.title = title;
+  setTitle(context, title) {
+    // state.title = title;
+    console.warn("这代码写的有问题啊,TODO",title)
   },
 };
 

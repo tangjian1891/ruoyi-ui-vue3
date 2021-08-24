@@ -7,3 +7,4 @@
 https://v3.vuejs.org/guide/migration/v-on-native-modifier-removed.html#v-on-native-modifier-removed  移除原因
 https://v3.vuejs.org/guide/migration/emits-option.html#_3-x-behavior   新的emits，更好的控制
 7.插槽。vue3使用vue2.6全新插槽语法，旧的语法已被移除 https://cn.vuejs.org/v2/guide/components-slots.html
+8.事件出事this.$emit()调整。 https://v3.vuejs.org/api/sfc-script-setup.html#defineprops-and-defineemits 配合6移除native阅读

@@ -11,10 +11,11 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "prettier/prettier": ["off", { endOfLine: "off" }],
-    '@typescript-eslint/no-explicit-any':'off',
-    "prefer-const":"off",
-    "no-useless-escape":'off',
-    "prefer-rest-params":"off",
-    "@typescript-eslint/no-var-requires":'off'
+    "@typescript-eslint/no-explicit-any": "off",
+    "prefer-const": "off",
+    "no-useless-escape": "off",
+    "prefer-rest-params": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
   },
 };

@@ -154,7 +154,7 @@ export default {
       return router;
     },
     // 菜单选择事件
-    handleSelect(key, keyPath) {
+    handleSelect(key) {
       this.currentIndex = key;
       if (this.ishttp(key)) {
         // http(s):// 路径新窗口打开

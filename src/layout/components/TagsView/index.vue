@@ -53,7 +53,7 @@ const elRef = ref(null)
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
-const { visible, top, left, selectedTag, affixTags } = toRefs(data)
+const { visible, top, left, selectedTag } = toRefs(data)
 let visitedViews: any = computed(() => {
   return store.state.tagsView.visitedViews
 })

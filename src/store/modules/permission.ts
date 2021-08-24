@@ -58,6 +58,7 @@ const permission = {
 
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
+  console.log(lastRouter)
   return asyncRouterMap.filter(route => {
     if (type && route.children) {
       route.children = filterChildren(route.children);
@@ -86,7 +87,7 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
 
 function filterChildren(childrenMap, lastRouter?: any) {
   let children = [];
-  childrenMap.forEach((el, index) => {
+  childrenMap.forEach((el) => {
     if (el.children && el.children.length) {
       if (el.component === "ParentView") {
         el.children.forEach(c => {

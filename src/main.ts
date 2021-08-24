@@ -8,6 +8,19 @@ import "element-plus/lib/theme-chalk/index.css";
 const app = createApp(App);
 app.use(ElementPlus);
 
+app.config.globalProperties
+
+app.config.globalProperties.msgSuccess = function (msg) {
+  app.config.globalProperties.$message({ showClose: true, message: msg, type: "success" });
+}
+
+app.config.globalProperties.msgError = function (msg) {
+  app.config.globalProperties.$message({ showClose: true, message: msg, type: "error" });
+}
+
+app.config.globalProperties.msgInfo = function (msg) {
+  app.config.globalProperties.$message.info(msg);
+}
 app.use(store)
 app.use(router);
 

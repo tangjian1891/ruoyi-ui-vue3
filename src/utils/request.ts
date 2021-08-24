@@ -80,7 +80,7 @@ service.interceptors.response.use(
       });
       return Promise.reject(new Error(msg));
     } else if (code !== 200) {
-      ElNotification.error!({
+      ElNotification?.error({
         title: msg,
       });
       return Promise.reject("error");
