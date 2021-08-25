@@ -27,9 +27,8 @@ export default {
     setTimeout(() => {
       this.loading = false;
     }, 300);
-    const that = this;
-    window.onresize = function temp() {
-      that.height = document.documentElement.clientHeight - 94.5 + "px;";
+    window.onresize =   temp() =>{
+      this.height = document.documentElement.clientHeight - 94.5 + "px;";
     };
   }
 };

@@ -3,9 +3,9 @@ import { ElNotification, ElMessageBox, ElMessage } from "element-plus";
 // import store from '@/store'
 import { getToken } from "@/utils/auth";
 import errorCode from "@/utils/errorCode";
-import { useStore } from "vuex";
-
-const store = useStore();
+// import { useStore } from "vuex";
+import  store from '../store'
+// const store = useStore();
 axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8";
 // 创建axios实例
 const service = axios.create({

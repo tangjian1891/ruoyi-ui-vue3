@@ -1,7 +1,8 @@
 <template>
   <div :class="classObj" class="app-wrapper" :style="{ '--current-color': theme }">
-    <!-- <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-    <sidebar
+    <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
+  
+    <Sidebar
       class="sidebar-container"
       :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBg : variables.menuLightBg }"
     />
@@ -14,27 +15,27 @@
       <right-panel v-if="showSettings">
         <settings />
       </right-panel>
-    </div>-->
+    </div>
+    <div>你好</div>
   </div>
 </template>
-<script lang="ts">
-// import * as variables from ''
-import variables from  '../assets/styles/variables.scss'
-// const variables = require('../assets/styles/variables.scss')
-console.log(variables)
-</script>
+ 
 <script setup lang="ts">
 import RightPanel from '@/components/RightPanel/index.vue'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import { useResizeMixin } from './mixin/ResizeHandler'
 import { mapState, useStore } from 'vuex'
 
-import { computed } from '@vue/reactivity'
+import { computed, reactive, ref } from '@vue/reactivity'
+import { useCssModule } from '@vue/runtime-dom'
 
+const variables = reactive(useCssModule('variables')) //css变量
 const store = useStore()
 const { theme, sideTheme, showSettings, needTagsView, fixedHeader } = store.state.settings
 const { sidebar, device } = store.state.app
-useResizeMixin()
+
+useResizeMixin()//混入
+
 const classObj = computed(() => {
   return {
     hideSidebar: !sidebar.opened,
@@ -44,17 +45,18 @@ const classObj = computed(() => {
   }
 })
 
-// const variables = computed(() => {
-//   return variables;
-// })
+
 function handleClickOutside() {
   store.dispatch('app/closeSideBar', { withoutAnimation: false })
 }
 
-
 </script>
+<style lang="scss" module="variables">
+@import "~@/assets/styles/variables.scss";
+</style>
 
-<style lang="scss" scoped>
+
+<style lang="scss" scoped >
 @import "~@/assets/styles/mixin.scss";
 @import "~@/assets/styles/variables.scss";
 

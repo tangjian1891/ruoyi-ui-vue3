@@ -1,5 +1,9 @@
 <template>
-    <div :class="{'has-logo':showLogo}" :style="{ backgroundColor: settings.sideTheme === 'theme-dark' ? variables.menuBg : variables.menuLightBg }">
+只是侧边栏木啊
+    <div
+        :class="{ 'has-logo': showLogo }"
+        :style="{ backgroundColor: settings.sideTheme === 'theme-dark' ? variables.menuBg : variables.menuLightBg }"
+    >
         <logo v-if="showLogo" :collapse="isCollapse" />
         <el-scrollbar :class="settings.sideTheme" wrap-class="scrollbar-wrapper">
             <el-menu
@@ -14,7 +18,7 @@
             >
                 <sidebar-item
                     v-for="(route, index) in sidebarRouters"
-                    :key="route.path  + index"
+                    :key="route.path + index"
                     :item="route"
                     :base-path="route.path"
                 />
@@ -23,11 +27,10 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapGetters, mapState } from "vuex";
-import Logo from "./Logo";
-import SidebarItem from "./SidebarItem";
-import variables from "@/assets/styles/variables.scss";
+import Logo from "./Logo.vue";
+import SidebarItem from "./SidebarItem.vue";
 
 export default {
     components: { SidebarItem, Logo },
@@ -46,12 +49,16 @@ export default {
         showLogo() {
             return this.$store.state.settings.sidebarLogo;
         },
-        variables() {
-            return variables;
-        },
+        // variables() {
+        //     return variables;
+        // },
         isCollapse() {
             return !this.sidebar.opened;
         }
     }
 };
 </script>
+
+<style lang="scss" module="variables">
+@import "~@/assets/styles/variables.scss";
+</style>

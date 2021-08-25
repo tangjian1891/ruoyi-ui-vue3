@@ -58,7 +58,7 @@ const permission = {
 
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
-  console.log(lastRouter)
+  console.log(lastRouter);
   return asyncRouterMap.filter(route => {
     if (type && route.children) {
       route.children = filterChildren(route.children);
@@ -87,7 +87,7 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
 
 function filterChildren(childrenMap, lastRouter?: any) {
   let children = [];
-  childrenMap.forEach((el) => {
+  childrenMap.forEach(el => {
     if (el.children && el.children.length) {
       if (el.component === "ParentView") {
         el.children.forEach(c => {
@@ -111,7 +111,10 @@ function filterChildren(childrenMap, lastRouter?: any) {
 
 export const loadView = view => {
   // 路由懒加载
-  return resolve => require([`@/views/${view}`], resolve);
+  // return resolve => require([`@/views/${view}`], resolve);
+  return () => Promise.resolve(require(`@/views/${view}`).default);
+  // console.log( Promise.resolve(import(`@/views/${view}`)))
+  // return () => Promise.resolve(import(`@/views/${view}`));
 };
 
 export default permission;

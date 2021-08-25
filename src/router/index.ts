@@ -1,4 +1,12 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import { ElMessage } from "element-plus";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import { getToken } from "@/utils/auth";
+// import { useStore } from "vuex";
+import store from "../store";
+// console.log(useStore())
+// const store = useStore();
 // import Home from "../views/Home.vue";
 // interface MyRouteRecordRaw extends RouteRecordRaw{
 //   hidden?:boolean
@@ -45,17 +53,17 @@ export const constantRoutes: Array<MyRouteRecordRaw> = [
   //   hidden: true
   // },
   {
-    path: '',
+    path: "",
     component: Layout,
-    redirect: 'index',
+    redirect: "index",
     children: [
       {
-        path: 'index',
-        component:  ()=>import('@/views/index.vue'),
-        name: 'Index',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
-      }
-    ]
+        path: "index",
+        component: () => import("@/views/index.vue"),
+        name: "Index",
+        meta: { title: "首页", icon: "dashboard", affix: true },
+      },
+    ],
   },
   // {
   //   path: '/user',
@@ -154,6 +162,67 @@ export const constantRoutes: Array<MyRouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes: constantRoutes,
+});
+
+// 路由守卫，权限位置
+
+NProgress.configure({ showSpinner: false });
+
+const whiteList = ["/login", "/auth-redirect", "/bind", "/register"];
+
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  console.log('这里初始化了吗')
+  if (getToken()) {
+    console.log(store);
+    to.meta.title && store.dispatch("settings/setTitle", to.meta.title);
+    /* has token*/
+    if (to.path === "/login") {
+      next({ path: "/" });
+      NProgress.done();
+    } else {
+      if (store.getters.roles.length === 0) {
+        // 判断当前用户是否已拉取完user_info信息
+        store
+          .dispatch("GetInfo")
+          .then(() => {
+            store.dispatch("GenerateRoutes").then(accessRoutes => {
+              // 根据roles权限生成可访问的路由表
+              // router.addRoutes(accessRoutes) // 动态添加可访问路由表
+              accessRoutes.forEach(item => {
+                if (item.path != "http://ruoyi.vip" && item.path != "*" && item.path != "https://gitee.com/JavaLionLi/RuoYi-Vue-Plus") {
+                  console.log(item);
+                  router.addRoute(item); // 动态添加可访问路由表
+                }
+                // router.addRoute(item); // 动态添加可访问路由表
+              });
+              next({ ...to, replace: true }); // hack方法 确保addRoutes已完成
+            });
+          })
+          .catch(err => {
+            store.dispatch("LogOut").then(() => {
+              ElMessage.error(err);
+              next({ path: "/" });
+            });
+          });
+      } else {
+        next();
+      }
+    }
+  } else {
+    // 没有token
+    if (whiteList.indexOf(to.path) !== -1) {
+      // 在免登录白名单，直接进入
+      next();
+    } else {
+      next(`/login?redirect=${to.fullPath}`); // 否则全部重定向到登录页
+      NProgress.done();
+    }
+  }
+});
+
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;
