@@ -381,7 +381,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import config from '../../package.json'
 
 export default {

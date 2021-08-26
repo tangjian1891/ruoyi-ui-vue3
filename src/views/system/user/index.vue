@@ -187,7 +187,7 @@
             width="120"
           />
           <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
-            <template v-slot="scope">
+            <template #default="scope">
               <el-switch
                 v-model="scope.row.status"
                 active-value="0"
@@ -203,7 +203,7 @@
             v-if="columns[6].visible"
             width="160"
           >
-            <template v-slot="scope">
+            <template #default="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
@@ -213,44 +213,46 @@
             width="160"
             class-name="small-padding fixed-width"
           >
-            <template v-slot="scope" v-if="scope.row.userId !== 1">
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-edit"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['system:user:edit']"
-              >修改</el-button>
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-delete"
-                @click="handleDelete(scope.row)"
-                v-hasPermi="['system:user:remove']"
-              >删除</el-button>
-              <el-dropdown
-                size="mini"
-                @command="(command) => handleCommand(command, scope.row)"
-                v-hasPermi="['system:user:resetPwd', 'system:user:edit']"
-              >
-                <span class="el-dropdown-link">
-                  <i class="el-icon-d-arrow-right el-icon--right"></i>更多
-                </span>
-                <template v-slot:dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item
-                      command="handleResetPwd"
-                      icon="el-icon-key"
-                      v-hasPermi="['system:user:resetPwd']"
-                    >重置密码</el-dropdown-item>
-                    <el-dropdown-item
-                      command="handleAuthRole"
-                      icon="el-icon-circle-check"
-                      v-hasPermi="['system:user:edit']"
-                    >分配角色</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+            <template #default="scope">
+              <template v-if="scope.row.userId !== 1">
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['system:user:edit']"
+                >修改</el-button>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['system:user:remove']"
+                >删除</el-button>
+                <el-dropdown
+                  size="mini"
+                  @command="(command) => handleCommand(command, scope.row)"
+                  v-hasPermi="['system:user:resetPwd', 'system:user:edit']"
+                >
+                  <span class="el-dropdown-link">
+                    <i class="el-icon-d-arrow-right el-icon--right"></i>更多
+                  </span>
+                  <template v-slot:dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item
+                        command="handleResetPwd"
+                        icon="el-icon-key"
+                        v-hasPermi="['system:user:resetPwd']"
+                      >重置密码</el-dropdown-item>
+                      <el-dropdown-item
+                        command="handleAuthRole"
+                        icon="el-icon-circle-check"
+                        v-hasPermi="['system:user:edit']"
+                      >分配角色</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </template>
             </template>
           </el-table-column>
         </el-table>

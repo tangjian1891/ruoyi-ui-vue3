@@ -3,7 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import ElementPlus from "element-plus";
-
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
+import { getConfigKey } from "@/api/system/config";
+import { getDicts } from "@/api/system/dict/data";
+import directives from './directive'
 import SvgIcon from './components/SvgIcon/index.vue'
 import "element-plus/lib/theme-chalk/index.css";
 
@@ -13,6 +16,16 @@ const app = createApp(App);
 app.use(ElementPlus);
 
 app.config.globalProperties
+
+
+app.config.globalProperties.getDicts = getDicts
+app.config.globalProperties.getConfigKey = getConfigKey
+app.config.globalProperties.parseTime = parseTime
+app.config.globalProperties.resetForm = resetForm
+app.config.globalProperties.addDateRange = addDateRange
+app.config.globalProperties.selectDictLabel = selectDictLabel
+app.config.globalProperties.selectDictLabels = selectDictLabels
+app.config.globalProperties.handleTree = handleTree
 
 app.config.globalProperties.msgSuccess = function (msg) {
   app.config.globalProperties.$message({ showClose: true, message: msg, type: "success" });
@@ -30,6 +43,7 @@ const req = require.context('./assets/icons/svg', false, /\.svg$/)
 const requireAll = requireContext => requireContext.keys().map(requireContext)
 requireAll(req)
 
+app.use(directives) //注册插件
 
 app.use(store)
 app.use(router);

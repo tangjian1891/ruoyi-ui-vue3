@@ -14,3 +14,6 @@ https://v3.vuejs.org/guide/migration/emits-option.html#_3-x-behavior   新的emi
 
 <!-- 依赖升级 --> 
 @riophae/vue-treeselect 升级为 vue3-treeselect
+
+<!-- webpack内部不在 polyfill node模块,所以path模块必须手动引入 -->
+path-browserify  以及 process
