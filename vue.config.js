@@ -1,4 +1,5 @@
 // const path = require("path");
+const { ProvidePlugin } = require("webpack");
 module.exports = {
   // resolve: {
   //   // fallback: { path: require.resolve("path-browserify") },
@@ -13,13 +14,20 @@ module.exports = {
         target: `http://10.10.0.77:8083/`,
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
-      }
+          ["^" + process.env.VUE_APP_BASE_API]: "",
+        },
+      },
     },
-    disableHostCheck: true
+    disableHostCheck: true,
   },
-  configureWebpack:config=>{
-    config.resolve.fallback={ path: false }
-  }
+  configureWebpack: config => {
+    config.resolve.fallback = {
+      path: require.resolve("path-browserify"),
+    };
+    config.plugins.push(
+      new ProvidePlugin({
+        process: "process/browser",
+      }),
+    );
+  },
 };

@@ -1,5 +1,4 @@
 <template>
-只是侧边栏木啊
     <div
         :class="{ 'has-logo': showLogo }"
         :style="{ backgroundColor: settings.sideTheme === 'theme-dark' ? variables.menuBg : variables.menuLightBg }"
@@ -62,3 +61,4 @@ export default {
 <style lang="scss" module="variables">
 @import "~@/assets/styles/variables.scss";
 </style>
+ 

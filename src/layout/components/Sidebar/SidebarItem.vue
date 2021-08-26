@@ -33,8 +33,8 @@
 </template>
 
 <script lang="ts">
-// import path from 'path'
-const path = require('path')
+import path from 'path'
+// const path = require('path')
 import { isExternal } from '@/utils/validate'
 import Item from './Item.vue'
 import AppLink from './Link.vue'
@@ -99,12 +99,16 @@ export default {
         return this.basePath
       }
       let str
-      console.log('这是什么啊啊啊', path)
+      console.log(path)
       try {
+        console.log("有了报错了",this.basePath, routePath)
         str = path.resolve(this.basePath, routePath)
+        // str = path.resolve('haha', 'nihao')
       } catch (error) {
+        // console.log("有了报错了",this.basePath, routePath)
         console.error(error)
       }
+      console.log(str)
       return str
     }
   }

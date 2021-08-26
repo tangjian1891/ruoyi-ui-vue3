@@ -5,6 +5,8 @@ import store from "./store";
 import ElementPlus from "element-plus";
 import "element-plus/lib/theme-chalk/index.css";
 
+import '@/assets/styles/index.scss' // global css
+import '@/assets/styles/ruoyi.scss' // ruoyi css
 const app = createApp(App);
 app.use(ElementPlus);
 

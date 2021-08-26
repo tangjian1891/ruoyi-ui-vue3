@@ -17,6 +17,8 @@
     "js-cookie": "^3.0.0",
     "jsencrypt": "^3.2.1",
     "nprogress": "^0.2.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
     "screenfull": "^5.1.0",
     "vue": "3.2.4",
     "vue-cropper": "^0.5.6",
