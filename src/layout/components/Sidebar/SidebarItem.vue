@@ -99,16 +99,13 @@ export default {
         return this.basePath
       }
       let str
-      console.log(path)
       try {
-        console.log("有了报错了",this.basePath, routePath)
         str = path.resolve(this.basePath, routePath)
         // str = path.resolve('haha', 'nihao')
       } catch (error) {
         // console.log("有了报错了",this.basePath, routePath)
-        console.error(error)
+        console.error('有报错了',error)
       }
-      console.log(str)
       return str
     }
   }

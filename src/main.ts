@@ -3,6 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import ElementPlus from "element-plus";
+
+import SvgIcon from './components/SvgIcon/index.vue'
 import "element-plus/lib/theme-chalk/index.css";
 
 import '@/assets/styles/index.scss' // global css
@@ -23,6 +25,12 @@ app.config.globalProperties.msgError = function (msg) {
 app.config.globalProperties.msgInfo = function (msg) {
   app.config.globalProperties.$message.info(msg);
 }
+app.component('svg-icon', SvgIcon)//全局icon
+const req = require.context('./assets/icons/svg', false, /\.svg$/)
+const requireAll = requireContext => requireContext.keys().map(requireContext)
+requireAll(req)
+
+
 app.use(store)
 app.use(router);
 

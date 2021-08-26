@@ -1,4 +1,4 @@
-// const path = require("path");
+const path = require("path");
 const { ProvidePlugin } = require("webpack");
 module.exports = {
   // resolve: {
@@ -29,5 +29,24 @@ module.exports = {
         process: "process/browser",
       }),
     );
+  },
+
+  chainWebpack(config) {
+    config.plugins.delete("preload"); // TODO: need test
+    config.plugins.delete("prefetch"); // TODO: need test
+
+    // set svg-sprite-loader
+    config.module.rule("svg").exclude.add(path.resolve("src/assets/icons")).end();
+    config.module
+      .rule("icons")
+      .test(/\.svg$/)
+      .include.add(path.resolve("src/assets/icons"))
+      .end()
+      .use("svg-sprite-loader")
+      .loader("svg-sprite-loader")
+      .options({
+        symbolId: "icon-[name]",
+      })
+      .end();
   },
 };
