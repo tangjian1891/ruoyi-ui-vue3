@@ -1,7 +1,7 @@
 <template>
   <div :class="classObj" class="app-wrapper" :style="{ '--current-color': theme }">
     <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-  
+
     <Sidebar
       class="sidebar-container"
       :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBg : variables.menuLightBg }"
@@ -13,7 +13,7 @@
       </div>
       <app-main />
       <right-panel v-if="showSettings">
-        <settings />
+        <Settings />
       </right-panel>
     </div>
     <div>你好</div>
@@ -24,14 +24,14 @@
 import RightPanel from '@/components/RightPanel/index.vue'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import { useResizeMixin } from './mixin/ResizeHandler'
-import { mapState, useStore } from 'vuex'
+import { useStore } from 'vuex'
 
-import { computed, reactive, ref } from '@vue/reactivity'
+import { computed, reactive, ref, toRefs } from '@vue/reactivity'
 import { useCssModule } from '@vue/runtime-dom'
 
 const variables = reactive(useCssModule('variables')) //css变量
 const store = useStore()
-const { theme, sideTheme, showSettings, needTagsView, fixedHeader } = store.state.settings
+const { theme, sideTheme, showSettings, needTagsView, fixedHeader } = toRefs(store.state.settings)
 const { sidebar, device } = store.state.app
 
 useResizeMixin()//混入

@@ -72,6 +72,7 @@ const setting = computed({
     return store.state.settings.showSettings
   },
   set(val) {
+    console.log("这里触发了")
     store.dispatch('settings/changeSetting', {
       key: 'showSettings',
       value: val

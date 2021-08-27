@@ -65,20 +65,20 @@ export const constantRoutes: Array<MyRouteRecordRaw> = [
       },
     ],
   },
-  // {
-  //   path: '/user',
-  //   component: Layout,
-  //   hidden: true,
-  //   redirect: 'noredirect',
-  //   children: [
-  //     {
-  //       path: 'profile',
-  //       component: (resolve) => require(['@/views/system/user/profile/index'], resolve),
-  //       name: 'Profile',
-  //       meta: { title: '个人中心', icon: 'user' }
-  //     }
-  //   ]
-  // },
+  {
+    path: "/user",
+    component: Layout,
+    hidden: true,
+    redirect: "noredirect",
+    children: [
+      {
+        path: "profile",
+        component: () => import("@/views/system/user/profile/index.vue"),
+        name: "Profile",
+        meta: { title: "个人中心", icon: "user" },
+      },
+    ],
+  },
   // {
   //   path: '/system/user-auth',
   //   component: Layout,
@@ -172,7 +172,7 @@ const whiteList = ["/login", "/auth-redirect", "/bind", "/register"];
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  console.log('这里初始化了吗')
+  console.log("这里初始化了吗");
   if (getToken()) {
     console.log(store);
     to.meta.title && store.dispatch("settings/setTitle", to.meta.title);

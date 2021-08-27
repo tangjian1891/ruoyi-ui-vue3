@@ -22,12 +22,15 @@ const data = reactive({
 const store = useStore()
 const emits = defineEmits(['change']) //事件
 const instance = getCurrentInstance()
-const internalInstance: any = getCurrentInstance()
+const { appContext: { config: { globalProperties } } }: any = getCurrentInstance()
 const defaultTheme = computed(() => {
   return store.state.settings.theme
 })
 
-watch(defaultTheme.value, (val: string) => {
+console.log(defaultTheme.value)
+
+watch(defaultTheme, (val: string) => {
+  console.log("赋值了啊啊啊", val)
   data.theme = val
 }, { immediate: true })
 
@@ -37,7 +40,7 @@ watch(() => data.theme, async (val: string) => {
   const themeCluster = getThemeCluster(val.replace('#', ''))
   const originalCluster = getThemeCluster(oldVal.replace('#', ''))
 
-  const $message = internalInstance.$message({
+  const $message = globalProperties.$message({
     message: '  Compiling the theme',
     customClass: 'theme-message',
     type: 'success',
@@ -61,7 +64,7 @@ watch(() => data.theme, async (val: string) => {
   }
 
   if (!data.chalk) {
-    const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
+    const url = `https://unpkg.com/element-plus@${version}/lib/theme-chalk/index.css`
     await getCSSString(url, 'chalk')
   }
 

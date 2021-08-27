@@ -15,7 +15,6 @@ import '@/assets/styles/ruoyi.scss' // ruoyi css
 const app = createApp(App);
 app.use(ElementPlus);
 
-app.config.globalProperties
 
 
 app.config.globalProperties.getDicts = getDicts
@@ -30,7 +29,8 @@ app.config.globalProperties.handleTree = handleTree
 app.config.globalProperties.msgSuccess = function (msg) {
   app.config.globalProperties.$message({ showClose: true, message: msg, type: "success" });
 }
-
+app.config.globalProperties.$foo="做啥啊啊啊啊"
+app.config.globalProperties.foo="做啥啊啊啊啊"
 app.config.globalProperties.msgError = function (msg) {
   app.config.globalProperties.$message({ showClose: true, message: msg, type: "error" });
 }

@@ -63,10 +63,10 @@
   </div>
 </template>
 
-<script>
-import userAvatar from "./userAvatar";
-import userInfo from "./userInfo";
-import resetPwd from "./resetPwd";
+<script lang="ts">
+import userAvatar from "./userAvatar.vue";
+import userInfo from "./userInfo.vue";
+import resetPwd from "./resetPwd.vue";
 import { getUserProfile } from "@/api/system/user";
 
 export default {
@@ -81,6 +81,7 @@ export default {
     };
   },
   created() {
+    console.log("进入了吗")
     this.getUser();
   },
   methods: {
