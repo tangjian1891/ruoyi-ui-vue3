@@ -1,8 +1,9 @@
 <template>
-  <el-dropdown trigger="click" @command="handleSetSize">
-    <div>
+  <el-dropdown trigger="click" @command="handleSetSize" >
+    <span class="right-menu-item hover-effect">
+      <!-- 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i> -->
       <svg-icon class-name="size-icon" icon-class="size" />
-    </div>
+    </span>
     <template v-slot:dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
@@ -10,17 +11,13 @@
           :key="item.value"
           :disabled="size === item.value"
           :command="item.value"
-        >
-          {{
-            item.label
-          }}
-        </el-dropdown-item>
+        >{{ item.label }}</el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   data() {
     return {
@@ -63,3 +60,24 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+.right-menu-item {
+  display: block;
+  padding: 0 8px;
+  height: 100%;
+  font-size: 18px;
+  color: #5a5e66;
+  transform: translateY(-15px);
+  // vertical-align: middle;
+
+  &.hover-effect {
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.025);
+    }
+  }
+}
+</style>
