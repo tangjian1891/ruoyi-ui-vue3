@@ -18,6 +18,7 @@ module.exports = {
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "vue/no-mutating-props":"off",
-    "vue/no-unused-components":'off'
+    "vue/no-unused-components":'off',
+    "no-unreachable":'warn'
   },
 };

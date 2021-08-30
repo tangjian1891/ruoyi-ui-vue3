@@ -3,6 +3,8 @@
  * Copyright (c) 2019 ruoyi
  */
 
+import { toRaw, unref } from "@vue/reactivity"
+
 //  const baseURL :string = process.env.VUE_APP_BASE_API
 
  // 日期格式化
@@ -47,14 +49,15 @@
  }
  
  // 表单重置
- export function resetForm(refName) {
-   if (this.$refs[refName]) {
-     this.$refs[refName].resetFields();
+ export function resetForm(formRef) {
+   if (formRef?.value) {
+    formRef.value.resetFields();
    }
  }
  
  // 添加日期范围
  export function addDateRange(params, dateRange, propName) {
+   console.log('查看数据格式',params,dateRange)
    const search = params;
    search.params = typeof (search.params) === 'object' && search.params !== null && !Array.isArray(search.params) ? search.params : {};
    dateRange = Array.isArray(dateRange) ? dateRange : [];
@@ -65,7 +68,7 @@
      search.params['begin' + propName] = dateRange[0];
      search.params['end' + propName] = dateRange[1];
    }
-   return search;
+   return unref(toRaw(search));
  }
  
  // 回显数据字典

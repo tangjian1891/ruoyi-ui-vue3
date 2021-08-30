@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" v-show="showSearch" :inline="true">
+    <el-form :model="queryParams" ref="queryFormRef" v-show="showSearch" :inline="true">
       <el-form-item label="角色名称" prop="roleName">
         <el-input
           v-model="queryParams.roleName"
@@ -62,6 +62,7 @@
           plain
           icon="el-icon-plus"
           size="mini"
+          :loading="btnLoading"
           @click="handleAdd"
           v-hasPermi="['system:role:add']"
         >新增</el-button>
@@ -72,6 +73,7 @@
           plain
           icon="el-icon-edit"
           size="mini"
+          :loading="btnLoading"
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:role:edit']"
@@ -124,44 +126,46 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template v-slot="scope" v-if="scope.row.roleId !== 1">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:role:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:role:remove']"
-          >删除</el-button>
-          <el-dropdown
-            size="mini"
-            @command="(command) => handleCommand(command, scope.row)"
-            v-hasPermi="['system:role:edit']"
-          >
-            <span class="el-dropdown-link">
-              <i class="el-icon-d-arrow-right el-icon--right"></i>更多
-            </span>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item
-                  command="handleDataScope"
-                  icon="el-icon-circle-check"
-                  v-hasPermi="['system:role:edit']"
-                >数据权限</el-dropdown-item>
-                <el-dropdown-item
-                  command="handleAuthUser"
-                  icon="el-icon-user"
-                  v-hasPermi="['system:role:edit']"
-                >分配用户</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+        <template v-slot="scope">
+          <template v-if="scope.row.roleId !== 1">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+              v-hasPermi="['system:role:edit']"
+            >修改</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+              v-hasPermi="['system:role:remove']"
+            >删除</el-button>
+            <el-dropdown
+              size="mini"
+              @command="command => handleCommand(command, scope.row)"
+              v-hasPermi="['system:role:edit']"
+            >
+              <span class="el-dropdown-link">
+                <i class="el-icon-d-arrow-right el-icon--right"></i>更多
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    command="handleDataScope"
+                    icon="el-icon-circle-check"
+                    v-hasPermi="['system:role:edit']"
+                  >数据权限</el-dropdown-item>
+                  <el-dropdown-item
+                    command="handleAuthUser"
+                    icon="el-icon-user"
+                    v-hasPermi="['system:role:edit']"
+                  >分配用户</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -176,7 +180,7 @@
 
     <!-- 添加或修改角色配置对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="form.roleName" placeholder="请输入角色名称" />
         </el-form-item>
@@ -219,7 +223,7 @@
             class="tree-border"
             :data="menuOptions"
             show-checkbox
-            ref="menu"
+            ref="menuRef"
             node-key="id"
             :check-strictly="!form.menuCheckStrictly"
             empty-text="加载中，请稍后"
@@ -272,7 +276,7 @@
             :data="deptOptions"
             show-checkbox
             default-expand-all
-            ref="dept"
+            ref="deptRef"
             node-key="id"
             :check-strictly="!form.deptCheckStrictly"
             empty-text="加载中，请稍后"
@@ -289,377 +293,401 @@
     </el-dialog>
   </div>
 </template>
-
-<script>
+ 
+<script lang="ts" setup>
 import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus } from "@/api/system/role";
 import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
 import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
 import { downLoadExcel } from "@/utils/download";
+import { reactive, Ref, ref, toRefs } from "@vue/reactivity";
+import { getCurrentInstance, onMounted } from "@vue/runtime-core";
+import { nextTick } from "process";
+import { useRouter } from "vue-router";
+import { useLoading } from "@/hooks/useHooks";
 
-export default {
-  name: "Role",
-  data() {
-    return {
-      // 遮罩层
-      loading: true,
-      // 导出遮罩层
-      exportLoading: false,
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 显示搜索条件
-      showSearch: true,
-      // 总条数
-      total: 0,
-      // 角色表格数据
-      roleList: [],
-      // 弹出层标题
-      title: "",
-      // 是否显示弹出层
-      open: false,
-      // 是否显示弹出层（数据权限）
-      openDataScope: false,
-      menuExpand: false,
-      menuNodeAll: false,
-      deptExpand: true,
-      deptNodeAll: false,
-      // 日期范围
-      dateRange: [],
-      // 状态数据字典
-      statusOptions: [],
-      // 数据范围选项
-      dataScopeOptions: [
-        {
-          value: "1",
-          label: "全部数据权限"
-        },
-        {
-          value: "2",
-          label: "自定数据权限"
-        },
-        {
-          value: "3",
-          label: "本部门数据权限"
-        },
-        {
-          value: "4",
-          label: "本部门及以下数据权限"
-        },
-        {
-          value: "5",
-          label: "仅本人数据权限"
-        }
-      ],
-      // 菜单列表
-      menuOptions: [],
-      // 部门列表
-      deptOptions: [],
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        roleName: undefined,
-        roleKey: undefined,
-        status: undefined
-      },
-      // 表单参数
-      form: {},
-      defaultProps: {
-        children: "children",
-        label: "label"
-      },
-      // 表单校验
-      rules: {
-        roleName: [
-          { required: true, message: "角色名称不能为空", trigger: "blur" }
-        ],
-        roleKey: [
-          { required: true, message: "权限字符不能为空", trigger: "blur" }
-        ],
-        roleSort: [
-          { required: true, message: "角色顺序不能为空", trigger: "blur" }
-        ]
-      }
-    };
+const initForm = () => {
+  return {
+    roleId: undefined,
+    roleName: undefined,
+    roleKey: undefined,
+    roleSort: 0,
+    status: "0",
+    menuIds: [],
+    deptIds: [],
+    menuCheckStrictly: true,
+    deptCheckStrictly: true,
+    remark: undefined,
+  }
+}
+
+const data = reactive({
+  // 遮罩层
+  loading: true,
+  // 导出遮罩层
+  exportLoading: false,
+  // 按钮loading
+  btnLoading: false,
+  // 选中数组
+  ids: [],
+  // 非单个禁用
+  single: true,
+  // 非多个禁用
+  multiple: true,
+  // 显示搜索条件
+  showSearch: true,
+  // 总条数
+  total: 0,
+  // 角色表格数据
+  roleList: [],
+  // 弹出层标题
+  title: "",
+  // 是否显示弹出层
+  open: false,
+  // 是否显示弹出层（数据权限）
+  openDataScope: false,
+  menuExpand: false,
+  menuNodeAll: false,
+  deptExpand: true,
+  deptNodeAll: false,
+  // 日期范围
+  dateRange: [],
+  // 状态数据字典
+  statusOptions: [],
+  // 数据范围选项
+  dataScopeOptions: [
+    {
+      value: "1",
+      label: "全部数据权限",
+    },
+    {
+      value: "2",
+      label: "自定数据权限",
+    },
+    {
+      value: "3",
+      label: "本部门数据权限",
+    },
+    {
+      value: "4",
+      label: "本部门及以下数据权限",
+    },
+    {
+      value: "5",
+      label: "仅本人数据权限",
+    },
+  ],
+  // 菜单列表
+  menuOptions: [],
+  // 部门列表
+  deptOptions: [],
+  // 查询参数
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    roleName: undefined,
+    roleKey: undefined,
+    status: undefined,
   },
-  created() {
-    this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
+  // 表单参数
+  form: initForm(),
+  defaultProps: {
+    children: "children",
+    label: "label",
+  },
+  // 表单校验
+  rules: {
+    roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
+    roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
+    roleSort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }],
+  },
+});
+
+const { loading, btnLoading, openLoading, closeLoading } = useLoading()
+
+const { exportLoading, ids, single, multiple, showSearch, total, roleList, title, open, openDataScope, menuExpand, menuNodeAll, deptExpand, deptNodeAll, dateRange, statusOptions, dataScopeOptions, menuOptions, deptOptions, queryParams, form, defaultProps, rules } = toRefs(data) //仅供模板使用
+const instance = getCurrentInstance();
+const router = useRouter();
+const queryFormRef: Ref = ref(null);
+const menuRef: Ref = ref(null);
+const formRef: Ref = ref(null);
+const deptRef: Ref = ref(null);
+const { addDateRange, getDicts, $confirm, msgSuccess, resetForm } = instance.appContext.config.globalProperties;
+onMounted(() => {
+  getList();
+  getDicts("sys_normal_disable").then(response => {
+    data.statusOptions = response.data;
+  });
+});
+
+/** 查询角色列表 */
+async function getList() {
+  openLoading()
+  const response = await listRole(addDateRange(queryParams, dateRange))
+  data.roleList = response.rows;
+  data.total = response.total;
+  closeLoading()
+}
+
+/** 查询菜单树结构 */
+function getMenuTreeselect() {
+  menuTreeselect().then(response => {
+    data.menuOptions = response.data;
+  });
+}
+
+/** 查询部门树结构 */
+function getDeptTreeselect() {
+  deptTreeselect().then(response => {
+    data.deptOptions = response.data;
+  });
+}
+
+// 所有菜单节点数据
+function getMenuAllCheckedKeys() {
+  // 目前被选中的菜单节点
+  let checkedKeys = menuRef.value.getCheckedKeys();
+  // 半选中的菜单节点
+  let halfCheckedKeys = menuRef.value.getHalfCheckedKeys();
+  console.log(checkedKeys)
+  console.log(halfCheckedKeys)
+  checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
+  return checkedKeys;
+}
+// 所有部门节点数据
+function getDeptAllCheckedKeys() {
+  // 目前被选中的部门节点
+  let checkedKeys = deptRef.value.getCheckedKeys();
+  // 半选中的部门节点
+  let halfCheckedKeys = deptRef.value.getHalfCheckedKeys();
+  checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
+  return checkedKeys;
+}
+
+
+
+/** 根据角色ID查询部门树结构 */
+function getRoleDeptTreeselect(roleId) {
+  return roleDeptTreeselect(roleId).then(response => {
+    data.deptOptions = response.data.depts;
+    return response;
+  });
+}
+// 角色状态修改
+function handleStatusChange(row) {
+  let text = row.status === "0" ? "启用" : "停用";
+  $confirm('确认要"' + text + '""' + row.roleName + '"角色吗?', "警告", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(function () {
+      return changeRoleStatus(row.roleId, row.status);
+    })
+    .then(() => {
+      msgSuccess(text + "成功");
+    })
+    .catch(function () {
+      row.status = row.status === "0" ? "1" : "0";
     });
-  },
-  methods: {
-    /** 查询角色列表 */
-    getList() {
-      this.loading = true;
-      listRole(this.addDateRange(this.queryParams, this.dateRange)).then(
-        response => {
-          this.roleList = response.rows;
-          this.total = response.total;
-          this.loading = false;
-        }
-      );
-    },
-    /** 查询菜单树结构 */
-    getMenuTreeselect() {
-      menuTreeselect().then(response => {
-        this.menuOptions = response.data;
-      });
-    },
-    /** 查询部门树结构 */
-    getDeptTreeselect() {
-      deptTreeselect().then(response => {
-        this.deptOptions = response.data;
-      });
-    },
-    // 所有菜单节点数据
-    getMenuAllCheckedKeys() {
-      // 目前被选中的菜单节点
-      let checkedKeys = this.$refs.menu.getCheckedKeys();
-      // 半选中的菜单节点
-      let halfCheckedKeys = this.$refs.menu.getHalfCheckedKeys();
-      checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
-      return checkedKeys;
-    },
-    // 所有部门节点数据
-    getDeptAllCheckedKeys() {
-      // 目前被选中的部门节点
-      let checkedKeys = this.$refs.dept.getCheckedKeys();
-      // 半选中的部门节点
-      let halfCheckedKeys = this.$refs.dept.getHalfCheckedKeys();
-      checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
-      return checkedKeys;
-    },
-    /** 根据角色ID查询菜单树结构 */
-    getRoleMenuTreeselect(roleId) {
-      return roleMenuTreeselect(roleId).then(response => {
-        this.menuOptions = response.data.menus;
-        return response;
-      });
-    },
-    /** 根据角色ID查询部门树结构 */
-    getRoleDeptTreeselect(roleId) {
-      return roleDeptTreeselect(roleId).then(response => {
-        this.deptOptions = response.data.depts;
-        return response;
-      });
-    },
-    // 角色状态修改
-    handleStatusChange(row) {
-      let text = row.status === "0" ? "启用" : "停用";
-      this.$confirm('确认要"' + text + '""' + row.roleName + '"角色吗?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        return changeRoleStatus(row.roleId, row.status);
-      }).then(() => {
-        this.msgSuccess(text + "成功");
-      }).catch(function () {
-        row.status = row.status === "0" ? "1" : "0";
-      });
-    },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 取消按钮（数据权限）
-    cancelDataScope() {
-      this.openDataScope = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      if (this.$refs.menu != undefined) {
-        this.$refs.menu.setCheckedKeys([]);
-      }
-      this.menuExpand = false,
-        this.menuNodeAll = false,
-        this.deptExpand = true,
-        this.deptNodeAll = false,
-        this.form = {
-          roleId: undefined,
-          roleName: undefined,
-          roleKey: undefined,
-          roleSort: 0,
-          status: "0",
-          menuIds: [],
-          deptIds: [],
-          menuCheckStrictly: true,
-          deptCheckStrictly: true,
-          remark: undefined
-        };
-      this.resetForm("form");
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.dateRange = [];
-      this.resetForm("queryForm");
-      this.handleQuery();
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.roleId)
-      this.single = selection.length != 1
-      this.multiple = !selection.length
-    },
-    // 更多操作触发
-    handleCommand(command, row) {
-      switch (command) {
-        case "handleDataScope":
-          this.handleDataScope(row);
-          break;
-        case "handleAuthUser":
-          this.handleAuthUser(row);
-          break;
-        default:
-          break;
-      }
-    },
-    // 树权限（展开/折叠）
-    handleCheckedTreeExpand(value, type) {
-      if (type == 'menu') {
-        let treeList = this.menuOptions;
-        for (let i = 0; i < treeList.length; i++) {
-          this.$refs.menu.store.nodesMap[treeList[i].id].expanded = value;
-        }
-      } else if (type == 'dept') {
-        let treeList = this.deptOptions;
-        for (let i = 0; i < treeList.length; i++) {
-          this.$refs.dept.store.nodesMap[treeList[i].id].expanded = value;
-        }
-      }
-    },
-    // 树权限（全选/全不选）
-    handleCheckedTreeNodeAll(value, type) {
-      if (type == 'menu') {
-        this.$refs.menu.setCheckedNodes(value ? this.menuOptions : []);
-      } else if (type == 'dept') {
-        this.$refs.dept.setCheckedNodes(value ? this.deptOptions : []);
-      }
-    },
-    // 树权限（父子联动）
-    handleCheckedTreeConnect(value, type) {
-      if (type == 'menu') {
-        this.form.menuCheckStrictly = value ? true : false;
-      } else if (type == 'dept') {
-        this.form.deptCheckStrictly = value ? true : false;
-      }
-    },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.getMenuTreeselect();
-      this.open = true;
-      this.title = "添加角色";
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const roleId = row.roleId || this.ids
-      const roleMenu = this.getRoleMenuTreeselect(roleId);
-      getRole(roleId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.$nextTick(() => {
-          roleMenu.then(res => {
-            let checkedKeys = res.data.checkedKeys
-            checkedKeys.forEach((v) => {
-              this.$nextTick(() => {
-                this.$refs.menu.setChecked(v, true, false);
-              })
-            })
-          });
-        });
-        this.title = "修改角色";
-      });
-    },
-    /** 选择角色权限范围触发 */
-    dataScopeSelectChange(value) {
-      if (value !== '2') {
-        this.$refs.dept.setCheckedKeys([]);
-      }
-    },
-    /** 分配数据权限操作 */
-    handleDataScope(row) {
-      this.reset();
-      const roleDeptTreeselect = this.getRoleDeptTreeselect(row.roleId);
-      getRole(row.roleId).then(response => {
-        this.form = response.data;
-        this.openDataScope = true;
-        this.$nextTick(() => {
-          roleDeptTreeselect.then(res => {
-            this.$refs.dept.setCheckedKeys(res.data.checkedKeys);
-          });
-        });
-        this.title = "分配数据权限";
-      });
-    },
-    /** 分配用户操作 */
-    handleAuthUser: function (row) {
-      const roleId = row.roleId;
-      this.$router.push("/system/role-auth/user/" + roleId);
-    },
-    /** 提交按钮 */
-    submitForm: function () {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.roleId != undefined) {
-            this.form.menuIds = this.getMenuAllCheckedKeys();
-            updateRole(this.form).then(response => {
-              this.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            this.form.menuIds = this.getMenuAllCheckedKeys();
-            addRole(this.form).then(response => {
-              this.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
-      });
-    },
-    /** 提交按钮（数据权限） */
-    submitDataScope: function () {
-      if (this.form.roleId != undefined) {
-        this.form.deptIds = this.getDeptAllCheckedKeys();
-        dataScope(this.form).then(response => {
-          this.msgSuccess("修改成功");
-          this.openDataScope = false;
-          this.getList();
-        });
-      }
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const roleIds = row.roleId || this.ids;
-      this.$confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        return delRole(roleIds);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("删除成功");
-      });
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      downLoadExcel('/system/role/export', this.queryParams);
+}
+// 取消按钮
+function cancel() {
+  data.open = false;
+  reset();
+}
+
+// 取消按钮（数据权限）
+function cancelDataScope() {
+  data.openDataScope = false;
+  reset();
+}
+
+// 弹窗表单重置
+function reset() {
+  if (menuRef.value != undefined) {
+    menuRef.value.setCheckedKeys([]);
+  }
+  data.menuExpand = data.menuNodeAll = data.deptNodeAll = false;
+  data.deptExpand = true;
+  data.form = initForm() //使用初始化数据覆盖form表单
+  resetForm("form");
+}
+
+/** 搜索按钮操作 */
+function handleQuery() {
+  data.queryParams.pageNum = 1;
+  getList();
+}
+
+/** 重置按钮操作 */
+function resetQuery() {
+  data.dateRange = [];
+  resetForm(queryFormRef);
+  handleQuery();
+}
+
+// 多选框选中数据
+function handleSelectionChange(selection) {
+  data.ids = selection.map(item => item.roleId);
+  data.single = selection.length != 1;
+  data.multiple = !selection.length;
+}
+
+// 更多操作触发
+function handleCommand(command, row) {
+  switch (command) {
+    case "handleDataScope":
+      handleDataScope(row);
+      break;
+    case "handleAuthUser":
+      handleAuthUser(row);
+      break;
+    default:
+      break;
+  }
+}
+// 树权限（展开/折叠） 有且仅展开第一层 。内部可去到所有节点
+function handleCheckedTreeExpand(value, type) {
+  if (type == "menu") {
+    let treeList = data.menuOptions;
+    for (let i = 0; i < treeList.length; i++) {
+      menuRef.value.store.nodesMap[treeList[i].id].expanded = value;
+    }
+  } else if (type == "dept") {
+    let treeList = data.deptOptions;
+    for (let i = 0; i < treeList.length; i++) {
+      deptRef.value.store.nodesMap[treeList[i].id].expanded = value;
     }
   }
-};
+}
+
+// 树权限（全选/全不选）
+function handleCheckedTreeNodeAll(value, type) {
+  console.log("这是什么value", value)
+  if (type == "menu") {
+    menuRef.value.setCheckedNodes(value ? data.menuOptions : []);
+  } else if (type == "dept") {
+    deptRef.value.setCheckedNodes(value ? data.deptOptions : []);
+  }
+}
+
+// 树权限（父子联动）
+function handleCheckedTreeConnect(value, type) {
+  if (type == "menu") {
+    data.form.menuCheckStrictly = value ? true : false;
+  } else if (type == "dept") {
+    data.form.deptCheckStrictly = value ? true : false;
+  }
+}
+
+/** 新增按钮操作 */
+function handleAdd() {
+  reset();
+  getMenuTreeselect();
+  data.open = true;
+  data.title = "添加角色";
+}
+
+/** 修改按钮操作 */
+async function handleUpdate(row) {
+  reset();
+  const roleId = row.roleId || data.ids;
+  openLoading()
+  // 获取用户权限树(),获取用户角色
+  const [roleMenu, response] = await Promise.all([roleMenuTreeselect(roleId), getRole(roleId)])
+  data.form = response.data;
+
+  data.open = true;
+
+
+  data.menuOptions = roleMenu.data.menus;
+  let checkedKeys = roleMenu.data.checkedKeys;
+  checkedKeys.forEach(v => {
+    nextTick(() => {
+      menuRef.value.setChecked(v, true, false);
+    });
+  });
+  closeLoading()
+  data.title = "修改角色";
+}
+
+/** 选择角色权限范围触发 */
+function dataScopeSelectChange(value) {
+  if (value !== "2") {
+    deptRef.value.setCheckedKeys([]);
+  }
+}
+
+/** 分配数据权限操作 */
+function handleDataScope(row) {
+  reset();
+  const roleDeptTreeselect = getRoleDeptTreeselect(row.roleId);
+  getRole(row.roleId).then(response => {
+    data.form = response.data;
+    data.openDataScope = true;
+    nextTick(() => {
+      roleDeptTreeselect.then(res => {
+        deptRef.setCheckedKeys(res.data.checkedKeys);
+      });
+    });
+    data.title = "分配数据权限";
+  });
+}
+
+/** 分配用户操作 */
+function handleAuthUser(row) {
+  const roleId = row.roleId;
+  router.push("/system/role-auth/user/" + roleId);
+}
+
+/** 提交按钮 */
+function submitForm() {
+  formRef.value.validate(async valid => {
+    if (valid) {
+      data.form.menuIds = getMenuAllCheckedKeys();
+      if (data.form.roleId != undefined) {
+        await updateRole(form)
+        msgSuccess("修改成功");
+      } else {
+        await addRole(data.form)
+        msgSuccess("新增成功");
+      }
+      data.open = false;
+      getList();
+    }
+  });
+}
+
+/** 提交按钮（数据权限） */
+function submitDataScope() {
+  if (this.form.roleId != undefined) {
+    data.form.deptIds = getDeptAllCheckedKeys();
+    dataScope(this.form).then(response => {
+      msgSuccess("修改成功");
+      data.openDataScope = false;
+      getList();
+    });
+  }
+}
+/** 删除按钮操作 */
+function handleDelete(row) {
+  const roleIds = row.roleId || this.ids;
+  $confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?', "警告", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(function () {
+      return delRole(roleIds);
+    })
+    .then(() => {
+      getList();
+      msgSuccess("删除成功");
+    });
+}
+
+/** 导出按钮操作 */
+function handleExport() {
+  downLoadExcel("/system/role/export", queryParams);
+}
 </script>
