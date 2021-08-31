@@ -300,8 +300,7 @@ import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/m
 import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
 import { downLoadExcel } from "@/utils/download";
 import { reactive, Ref, ref, toRefs } from "@vue/reactivity";
-import { getCurrentInstance, onMounted } from "@vue/runtime-core";
-import { nextTick } from "process";
+import { getCurrentInstance, nextTick, onMounted } from "@vue/runtime-core";
 import { useRouter } from "vue-router";
 import { useLoading } from "@/hooks/useHooks";
 
@@ -404,7 +403,7 @@ const data = reactive({
 
 const { loading, btnLoading, openLoading, closeLoading } = useLoading()
 
-const { exportLoading, ids, single, multiple, showSearch, total, roleList, title, open, openDataScope, menuExpand, menuNodeAll, deptExpand, deptNodeAll, dateRange, statusOptions, dataScopeOptions, menuOptions, deptOptions, queryParams, form, defaultProps, rules } = toRefs(data) //仅供模板使用
+const { exportLoading, single, multiple, showSearch, total, roleList, title, open, openDataScope, menuExpand, menuNodeAll, deptExpand, deptNodeAll, dateRange, statusOptions, dataScopeOptions, menuOptions, deptOptions, queryParams, form, defaultProps, rules } = toRefs(data) //仅供模板使用
 const instance = getCurrentInstance();
 const router = useRouter();
 const queryFormRef: Ref = ref(null);
@@ -435,12 +434,6 @@ function getMenuTreeselect() {
   });
 }
 
-/** 查询部门树结构 */
-function getDeptTreeselect() {
-  deptTreeselect().then(response => {
-    data.deptOptions = response.data;
-  });
-}
 
 // 所有菜单节点数据
 function getMenuAllCheckedKeys() {
@@ -463,15 +456,6 @@ function getDeptAllCheckedKeys() {
   return checkedKeys;
 }
 
-
-
-/** 根据角色ID查询部门树结构 */
-function getRoleDeptTreeselect(roleId) {
-  return roleDeptTreeselect(roleId).then(response => {
-    data.deptOptions = response.data.depts;
-    return response;
-  });
-}
 // 角色状态修改
 function handleStatusChange(row) {
   let text = row.status === "0" ? "启用" : "停用";
@@ -619,19 +603,18 @@ function dataScopeSelectChange(value) {
 }
 
 /** 分配数据权限操作 */
-function handleDataScope(row) {
+async function handleDataScope(row) {
   reset();
-  const roleDeptTreeselect = getRoleDeptTreeselect(row.roleId);
-  getRole(row.roleId).then(response => {
-    data.form = response.data;
-    data.openDataScope = true;
-    nextTick(() => {
-      roleDeptTreeselect.then(res => {
-        deptRef.setCheckedKeys(res.data.checkedKeys);
-      });
-    });
-    data.title = "分配数据权限";
-  });
+  // 根据id查询部门树结构，查询改角色相关信息
+  const [deptRes, roleRes] = await Promise.all([roleDeptTreeselect(row.roleId), getRole(row.roleId)])
+  data.deptOptions = deptRes.data.depts; //部门树
+  data.openDataScope = true; //
+  await nextTick()
+  deptRef.value.setCheckedKeys(deptRes.data.checkedKeys);//选中的部门树
+
+  data.form = roleRes.data;//角色相关信息
+
+  data.title = "分配数据权限";
 }
 
 /** 分配用户操作 */
@@ -646,7 +629,7 @@ function submitForm() {
     if (valid) {
       data.form.menuIds = getMenuAllCheckedKeys();
       if (data.form.roleId != undefined) {
-        await updateRole(form)
+        await updateRole(data.form)
         msgSuccess("修改成功");
       } else {
         await addRole(data.form)

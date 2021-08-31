@@ -20,8 +20,7 @@
     </el-upload>
 
     <!-- 上传提示 -->
-
-    <div class="el-upload__tip" slot="tip" v-if="showTip">
+    <div class="el-upload__tip" v-if="showTip">
       请上传
       <template v-if="fileSize">
         大小不超过

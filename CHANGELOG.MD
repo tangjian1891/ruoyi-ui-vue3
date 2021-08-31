@@ -12,6 +12,9 @@ https://v3.vuejs.org/guide/migration/emits-option.html#_3-x-behavior   新的emi
 10.vue2挂载到原型的。现在挂载为 app.config.globalProperties上.调用方式  internalInstance.appContext.config.globalProperties 为 https://v3.vuejs.org/api/composition-api.html#getcurrentinstance   还有一种为internalInstance.proxy
 
 
+.native 全部替换为 空
+
+
 <!-- 依赖升级 --> 
 @riophae/vue-treeselect 升级为 vue3-treeselect
 
