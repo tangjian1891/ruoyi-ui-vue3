@@ -5,18 +5,11 @@
       width="500px"
       :close-on-click-modal="false"
       :modal-append-to-body="false"
-      v-on="$listeners"
       @open="onOpen"
       @close="onClose"
     >
       <el-row :gutter="15">
-        <el-form
-          ref="elForm"
-          :model="formData"
-          :rules="rules"
-          size="medium"
-          label-width="100px"
-        >
+        <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
           <el-col :span="24">
             <el-form-item label="生成类型" prop="type">
               <el-radio-group v-model="formData.type">
@@ -25,9 +18,7 @@
                   :key="index"
                   :label="item.value"
                   :disabled="item.disabled"
-                >
-                  {{ item.label }}
-                </el-radio-button>
+                >{{ item.label }}</el-radio-button>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-if="showFileName" label="文件名" prop="fileName">
@@ -36,15 +27,12 @@
           </el-col>
         </el-form>
       </el-row>
-
-      <div slot="footer">
-        <el-button @click="close">
-          取消
-        </el-button>
-        <el-button type="primary" @click="handelConfirm">
-          确定
-        </el-button>
-      </div>
+      <template #footer>
+        <div>
+          <el-button @click="close">取消</el-button>
+          <el-button type="primary" @click="handelConfirm">确定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -82,7 +70,7 @@ export default {
   computed: {
   },
   watch: {},
-  mounted() {},
+  mounted() { },
   methods: {
     onOpen() {
       if (this.showFileName) {

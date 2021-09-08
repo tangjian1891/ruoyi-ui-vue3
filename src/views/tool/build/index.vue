@@ -163,7 +163,7 @@ import { makeUpJs } from '@/utils/generator/js'
 import { makeUpCss } from '@/utils/generator/css'
 import drawingDefalut from '@/utils/generator/drawingDefalut'
 // import logo from '../ /assets/logo/logo.png'
-import logo from '../../../assets/logo/logo.png'
+const  logo = require('../../../assets/logo/logo.png')
 import CodeTypeDialog from './CodeTypeDialog.vue'
 import DraggableItem from './DraggableItem.vue'
 

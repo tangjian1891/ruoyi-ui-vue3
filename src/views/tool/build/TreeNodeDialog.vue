@@ -4,7 +4,6 @@
       v-bind="$attrs"
       :close-on-click-modal="false"
       :modal-append-to-body="false"
-      v-on="$listeners"
       @open="onOpen"
       @close="onClose"
     >
@@ -43,7 +42,7 @@
     </el-dialog>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { isNumberStr } from '@/utils/index'
 
 export default {
