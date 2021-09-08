@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="12">
         <el-form-item prop="tplCategory">
-          <span slot="label">生成模板</span>
+          <template #label>生成模板</template>
           <el-select v-model="info.tplCategory" @change="tplSelectChange">
             <el-option label="单表（增删改查）" value="crud" />
             <el-option label="树表（增删改查）" value="tree" />
@@ -14,12 +14,14 @@
 
       <el-col :span="12">
         <el-form-item prop="packageName">
-          <span slot="label">
-            生成包路径
-            <el-tooltip content="生成在哪个java包下，例如 com.ruoyi.system" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
+          <template #label>
+            <span>
+              生成包路径
+              <el-tooltip content="生成在哪个java包下，例如 com.ruoyi.system" placement="top">
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+            </span>
+          </template>
           <el-input v-model="info.packageName" />
         </el-form-item>
       </el-col>
@@ -27,7 +29,7 @@
       <el-col :span="12">
         <el-form-item prop="moduleName">
           <template #label>
-            <span slot="label">
+            <span  >
               生成模块名
               <el-tooltip content="可理解为子系统名，例如 system" placement="top">
                 <i class="el-icon-question"></i>
@@ -40,12 +42,14 @@
 
       <el-col :span="12">
         <el-form-item prop="businessName">
-          <span slot="label">
-            生成业务名
-            <el-tooltip content="可理解为功能英文名，例如 user" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
+          <template #label>
+            <span>
+              生成业务名
+              <el-tooltip content="可理解为功能英文名，例如 user" placement="top">
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+            </span>
+          </template>
           <el-input v-model="info.businessName" />
         </el-form-item>
       </el-col>
@@ -102,12 +106,14 @@
 
       <el-col :span="24" v-if="info.genType == '1'">
         <el-form-item prop="genPath">
-          <span slot="label">
-            自定义路径
-            <el-tooltip content="填写磁盘绝对路径，若不填写，则生成到当前Web项目下" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
+          <template #label>
+            <span>
+              自定义路径
+              <el-tooltip content="填写磁盘绝对路径，若不填写，则生成到当前Web项目下" placement="top">
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+            </span>
+          </template>
           <el-input v-model="info.genPath">
             <template #append>
               <el-dropdown>
@@ -115,9 +121,11 @@
                   最近路径快速选择
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click="info.genPath = '/'">恢复默认的生成基础路径</el-dropdown-item>
-                </el-dropdown-menu>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item @click="info.genPath = '/'">恢复默认的生成基础路径</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
               </el-dropdown>
             </template>
           </el-input>
@@ -212,12 +220,14 @@
       </el-col>
       <el-col :span="12">
         <el-form-item>
-          <span slot="label">
-            子表关联的外键名
-            <el-tooltip content="子表关联的外键名， 如：user_id" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
+          <template #label>
+            <span>
+              子表关联的外键名
+              <el-tooltip content="子表关联的外键名， 如：user_id" placement="top">
+                <i class="el-icon-question"></i>
+              </el-tooltip>
+            </span>
+          </template>
           <el-select v-model="info.subTableFkName" placeholder="请选择">
             <el-option
               v-for="(column, index) in subColumns"

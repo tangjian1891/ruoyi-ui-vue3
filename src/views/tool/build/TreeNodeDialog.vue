@@ -9,64 +9,37 @@
       @close="onClose"
     >
       <el-row :gutter="0">
-        <el-form
-          ref="elForm"
-          :model="formData"
-          :rules="rules"
-          size="small"
-          label-width="100px"
-        >
+        <el-form ref="elForm" :model="formData" :rules="rules" size="small" label-width="100px">
           <el-col :span="24">
-            <el-form-item
-              label="选项名"
-              prop="label"
-            >
-              <el-input
-                v-model="formData.label"
-                placeholder="请输入选项名"
-                clearable
-              />
+            <el-form-item label="选项名" prop="label">
+              <el-input v-model="formData.label" placeholder="请输入选项名" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item
-              label="选项值"
-              prop="value"
-            >
-              <el-input
-                v-model="formData.value"
-                placeholder="请输入选项值"
-                clearable
-              >
-                <el-select
-                  slot="append"
-                  v-model="dataType"
-                  :style="{width: '100px'}"
-                >
-                  <el-option
-                    v-for="(item, index) in dataTypeOptions"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                    :disabled="item.disabled"
-                  />
-                </el-select>
+            <el-form-item label="选项值" prop="value">
+              <el-input v-model="formData.value" placeholder="请输入选项值" clearable>
+                <template #append>
+                  <el-select v-model="dataType" :style="{ width: '100px' }">
+                    <el-option
+                      v-for="(item, index) in dataTypeOptions"
+                      :key="index"
+                      :label="item.label"
+                      :value="item.value"
+                      :disabled="item.disabled"
+                    />
+                  </el-select>
+                </template>
               </el-input>
             </el-form-item>
           </el-col>
         </el-form>
       </el-row>
-      <div slot="footer">
-        <el-button
-          type="primary"
-          @click="handelConfirm"
-        >
-          确定
-        </el-button>
-        <el-button @click="close">
-          取消
-        </el-button>
-      </div>
+      <template #footer>
+        <div>
+          <el-button type="primary" @click="handelConfirm">确定</el-button>
+          <el-button @click="close">取消</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -120,8 +93,8 @@ export default {
       this.dataType = isNumberStr(val) ? 'number' : 'string'
     }
   },
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
   methods: {
     onOpen() {
       this.formData = {
@@ -129,7 +102,7 @@ export default {
         value: undefined
       }
     },
-    onClose() {},
+    onClose() { },
     close() {
       this.$emit('update:visible', false)
     },

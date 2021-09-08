@@ -19,6 +19,7 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "vue/no-mutating-props":"off",
     "vue/no-unused-components":'off',
-    "no-unreachable":'warn'
+    "no-unreachable":'warn',
+    "@typescript-eslint/no-empty-function":"off"
   },
 };
