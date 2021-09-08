@@ -4,26 +4,27 @@
       v-bind="$attrs"
       width="980px"
       :modal-append-to-body="false"
-      v-on="$listeners"
       @open="onOpen"
       @close="onClose"
     >
-      <div slot="title">
-        选择图标
-        <el-input
-          v-model="key"
-          size="mini"
-          :style="{width: '260px'}"
-          placeholder="请输入图标名称"
-          prefix-icon="el-icon-search"
-          clearable
-        />
-      </div>
+      <template #title>
+        <div>
+          选择图标
+          <el-input
+            v-model="key"
+            size="mini"
+            :style="{ width: '260px' }"
+            placeholder="请输入图标名称"
+            prefix-icon="el-icon-search"
+            clearable
+          />
+        </div>
+      </template>
       <ul class="icon-ul">
         <li
           v-for="icon in iconList"
           :key="icon"
-          :class="active===icon?'active-item':''"
+          :class="active === icon ? 'active-item' : ''"
           @click="onSelect(icon)"
         >
           <i :class="icon" />
@@ -62,7 +63,7 @@ export default {
       this.active = this.current
       this.key = ''
     },
-    onClose() {},
+    onClose() { },
     onSelect(icon) {
       this.active = icon
       this.$emit('select', icon)
@@ -90,9 +91,9 @@ export default {
     &:hover {
       background: #f2f2f2;
     }
-    &.active-item{
+    &.active-item {
       background: #e1f3fb;
-      color: #7a6df0
+      color: #7a6df0;
     }
     > i {
       font-size: 30px;

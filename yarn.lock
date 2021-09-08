@@ -3797,6 +3797,11 @@ file-loader@^6.1.1:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
 
+file-saver@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.nlark.com/file-saver/download/file-saver-2.0.5.tgz#d61cfe2ce059f414d899e9dd6d4107ee25670c38"
+  integrity sha1-1hz+LOBZ9BTYmendbUEH7iVnDDg=
+
 file-uri-to-path@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/file-uri-to-path/-/file-uri-to-path-1.0.0.tgz#553a7b8446ff6f684359c445f1e37a05dacc33dd"
@@ -6981,7 +6986,7 @@ sockjs@^0.3.21:
     uuid "^3.4.0"
     websocket-driver "^0.7.4"
 
-sortablejs@^1.14.0:
+sortablejs@1.14.0, sortablejs@^1.14.0:
   version "1.14.0"
   resolved "https://registry.nlark.com/sortablejs/download/sortablejs-1.14.0.tgz#6d2e17ccbdb25f464734df621d4f35d4ab35b3d8"
   integrity sha1-bS4XzL2yX0ZHNN9iHU811Ks1s9g=
@@ -7799,6 +7804,13 @@ vue@3.2.4:
     "@vue/compiler-dom" "3.2.4"
     "@vue/runtime-dom" "3.2.4"
     "@vue/shared" "3.2.4"
+
+vuedraggable@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.nlark.com/vuedraggable/download/vuedraggable-4.1.0.tgz?cache=0&sync_timestamp=1629672362084&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fvuedraggable%2Fdownload%2Fvuedraggable-4.1.0.tgz#edece68adb8a4d9e06accff9dfc9040e66852270"
+  integrity sha1-7ezmituKTZ4GrM/538kEDmaFInA=
+  dependencies:
+    sortablejs "1.14.0"
 
 vuex@^4.0.0:
   version "4.0.2"

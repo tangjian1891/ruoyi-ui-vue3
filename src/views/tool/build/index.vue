@@ -131,7 +131,7 @@
     />
 
     <code-type-dialog
-      :visible.sync="dialogVisible"
+      v-model="dialogVisible"
       title="选择生成类型"
       :show-file-name="showFileName"
       @confirm="generate"
@@ -146,7 +146,7 @@ import { saveAs } from 'file-saver'
 import beautifier from 'js-beautify'
 import ClipboardJS from 'clipboard'
 import render from '@/utils/generator/render'
-import RightPanel from './RightPanel'
+import RightPanel from './RightPanel.vue'
 import {
   inputComponents,
   selectComponents,
@@ -286,7 +286,7 @@ export default {
       this.generateConf = data
       func && func(data)
     },
-    execRun(data) {
+    execRun() {
       this.AssembleFormData()
       this.drawerVisible = true
     },
@@ -295,7 +295,7 @@ export default {
       const blob = new Blob([codeStr], { type: 'text/plain;charset=utf-8' })
       saveAs(blob, data.fileName)
     },
-    execCopy(data) {
+    execCopy() {
       document.getElementById('copyNode').click()
     },
     empty() {
