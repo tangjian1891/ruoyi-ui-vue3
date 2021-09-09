@@ -20,6 +20,7 @@ module.exports = {
     "vue/no-mutating-props":"off",
     "vue/no-unused-components":'off',
     "no-unreachable":'warn',
-    "@typescript-eslint/no-empty-function":"off"
+    "@typescript-eslint/no-empty-function":"off",
+    "no-var":"off"
   },
 };

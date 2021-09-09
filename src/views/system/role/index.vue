@@ -142,29 +142,27 @@
               @click="handleDelete(scope.row)"
               v-hasPermi="['system:role:remove']"
             >删除</el-button>
-            <el-dropdown
-              size="mini"
-              @command="command => handleCommand(command, scope.row)"
-              v-hasPermi="['system:role:edit']"
-            >
-              <span class="el-dropdown-link">
-                <i class="el-icon-d-arrow-right el-icon--right"></i>更多
-              </span>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item
-                    command="handleDataScope"
-                    icon="el-icon-circle-check"
-                    v-hasPermi="['system:role:edit']"
-                  >数据权限</el-dropdown-item>
-                  <el-dropdown-item
-                    command="handleAuthUser"
-                    icon="el-icon-user"
-                    v-hasPermi="['system:role:edit']"
-                  >分配用户</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
+            <template v-hasPermi="['system:role:edit']">
+              <el-dropdown size="mini" @command="command => handleCommand(command, scope.row)">
+                <span class="el-dropdown-link">
+                  <i class="el-icon-d-arrow-right el-icon--right"></i>更多
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item
+                      command="handleDataScope"
+                      icon="el-icon-circle-check"
+                      v-hasPermi="['system:role:edit']"
+                    >数据权限</el-dropdown-item>
+                    <el-dropdown-item
+                      command="handleAuthUser"
+                      icon="el-icon-user"
+                      v-hasPermi="['system:role:edit']"
+                    >分配用户</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </template>
           </template>
         </template>
       </el-table-column>
@@ -293,7 +291,11 @@
     </el-dialog>
   </div>
 </template>
- 
+ <script lang="ts">
+export default {
+  name: "role"
+}
+</script>
 <script lang="ts" setup>
 import { listRole, getRole, delRole, addRole, updateRole, dataScope, changeRoleStatus } from "@/api/system/role";
 import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";

@@ -12,6 +12,10 @@ import "element-plus/lib/theme-chalk/index.css";
 
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/ruoyi.scss' // ruoyi css
+
+
+import Pagination from "@/components/Pagination/index.vue";
+
 const app = createApp(App);
 app.use(ElementPlus);
 
@@ -39,6 +43,7 @@ app.config.globalProperties.msgInfo = function (msg) {
   app.config.globalProperties.$message.info(msg);
 }
 app.component('svg-icon', SvgIcon)//全局icon
+app.component('pagination',Pagination)
 const req = require.context('./assets/icons/svg', false, /\.svg$/)
 const requireAll = requireContext => requireContext.keys().map(requireContext)
 requireAll(req)

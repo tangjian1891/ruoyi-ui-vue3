@@ -19,7 +19,11 @@
     <div>你好</div>
   </div>
 </template>
- 
+ <script lang="ts">
+ export default {
+   name:"layout"
+ }
+ </script>
 <script setup lang="ts">
 import RightPanel from '@/components/RightPanel/index.vue'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
