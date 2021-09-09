@@ -56,7 +56,7 @@ const user = {
         getInfo()
           .then(res => {
             const user = res.data.user;
-            const avatar = user.avatar == "" ? require("@/assets/images/profile.jpg") : user.avatar;
+            const avatar = user.avatar == "" ? require("@/assets/images/profile.jpg").default : user.avatar;
             if (res.data.roles && res.data.roles.length > 0) {
               // 验证返回的roles是否是一个非空数组
               commit("SET_ROLES", res.data.roles);
