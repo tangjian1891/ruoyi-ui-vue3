@@ -12,7 +12,7 @@
 
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
-        <search id="header-search" class="right-menu-item" />
+        <HeaderSearch id="header-search" class="right-menu-item" />
 
         <el-tooltip content="源码地址" effect="dark" placement="bottom">
           <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
@@ -60,7 +60,7 @@ import TopNav from '@/components/TopNav/index.vue'
 import Hamburger from '@/components/Hamburger/index.vue'
 import Screenfull from '@/components/Screenfull/index.vue'
 import SizeSelect from '@/components/SizeSelect/index.vue'
-import Search from '@/components/HeaderSearch/index.vue'
+import HeaderSearch from '@/components/HeaderSearch/index.vue'
 import RuoYiGit from '@/components/RuoYi/Git/index.vue'
 import RuoYiDoc from '@/components/RuoYi/Doc/index.vue'
 import { computed } from '@vue/reactivity'

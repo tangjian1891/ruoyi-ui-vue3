@@ -1,24 +1,28 @@
 <template>
-  <el-dropdown trigger="click" @command="handleSetSize" >
-    <span class="right-menu-item hover-effect">
-      <!-- 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i> -->
-      <svg-icon class-name="size-icon" icon-class="size" />
-    </span>
-    <template v-slot:dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item
-          v-for="item of sizeOptions"
-          :key="item.value"
-          :disabled="size === item.value"
-          :command="item.value"
-        >{{ item.label }}</el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
+  <div>
+    <el-dropdown trigger="click" @command="handleSetSize">
+      <span class="right-menu-item hover-effect">
+        <!-- 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i> -->
+        <svg-icon class-name="size-icon" icon-class="size" />
+      </span>
+      <template v-slot:dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item
+            v-for="item of sizeOptions"
+            :key="item.value"
+            :disabled="size === item.value"
+            :command="item.value"
+          >{{ item.label }}</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
 </template>
 
+ 
 <script lang="ts">
 export default {
+  name: "SizeSelect",
   data() {
     return {
       sizeOptions: [
