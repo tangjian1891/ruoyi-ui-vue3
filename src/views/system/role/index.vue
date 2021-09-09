@@ -196,7 +196,7 @@
           <el-input v-model="form.roleKey" placeholder="请输入权限字符" />
         </el-form-item>
         <el-form-item label="角色顺序" prop="roleSort">
-          <el-input-number v-model="form.roleSort" controls-position="right" :min="0" />
+          <el-input-number v-model="form.roleSort" controls-position="right" :min="1" />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
@@ -303,7 +303,7 @@ import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/m
 import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
 import { downLoadExcel } from "@/utils/download";
 import { reactive, Ref, ref, toRefs } from "@vue/reactivity";
-import { getCurrentInstance, nextTick, onMounted } from "@vue/runtime-core";
+import { getCurrentInstance, nextTick, onMounted, watch, watchEffect } from "@vue/runtime-core";
 import { useRouter } from "vue-router";
 import { useLoading } from "@/hooks/useHooks";
 
@@ -420,6 +420,7 @@ onMounted(() => {
     data.statusOptions = response.data;
   });
 });
+
 
 /** 查询角色列表 */
 async function getList() {

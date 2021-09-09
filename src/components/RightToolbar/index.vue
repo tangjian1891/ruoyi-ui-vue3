@@ -11,7 +11,7 @@
         <el-button size="mini" circle icon="el-icon-menu" @click="showColumn()" />
       </el-tooltip>
     </el-row>
-    <el-dialog :title="title" v-model:visible="open" append-to-body>
+    <el-dialog :title="title" v-model="open" append-to-body>
       <el-transfer
         :titles="['显示', '隐藏']"
         v-model="value"
@@ -21,7 +21,7 @@
     </el-dialog>
   </div>
 </template>
-<script>
+<script lang="ts">
 export default {
   name: "RightToolbar",
   data() {
