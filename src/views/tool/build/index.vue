@@ -237,7 +237,7 @@ export default {
         return codeStr
       }
     })
-    clipboard.on('error', e => {
+    clipboard.on('error', () => {
       this.$message.error('代码复制失败')
     })
   },
@@ -246,7 +246,7 @@ export default {
       this.activeData = element
       this.activeId = element.formId
     },
-    onEnd(obj, a) {
+    onEnd(obj) {
       if (obj.from !== obj.to) {
         this.activeData = tempActiveData
         this.activeId = this.idGlobal

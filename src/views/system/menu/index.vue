@@ -37,7 +37,7 @@
           v-hasPermi="['system:menu:add']"
         >新增</el-button>
       </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+      <RightToolbar v-model:showSearch="showSearch" @queryTable="getList" /> 
     </el-row>
 
     <el-table
@@ -250,11 +250,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { listMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import IconSelect from "@/components/IconSelect";
+import IconSelect from "@/components/IconSelect/index.vue";
 
 export default {
   name: "Menu",

@@ -21,6 +21,7 @@ module.exports = {
     "vue/no-unused-components":'off',
     "no-unreachable":'warn',
     "@typescript-eslint/no-empty-function":"off",
-    "no-var":"off"
+    "no-var":"off",
+    "@typescript-eslint/no-unused-vars":"off"
   },
 };

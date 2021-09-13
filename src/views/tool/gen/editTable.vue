@@ -63,7 +63,6 @@
             </template>
           </el-table-column>
           <el-table-column label="查询方式" min-width="10%">
-            
             <template #default="scope">
               <el-select v-model="scope.row.queryType">
                 <el-option label="=" value="EQ" />
@@ -104,17 +103,18 @@
                   v-for="dict in dictOptions"
                   :key="dict.dictType"
                   :label="dict.dictName"
-                  :value="dict.dictType">
+                  :value="dict.dictType"
+                >
                   <span style="float: left">{{ dict.dictName }}</span>
                   <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.dictType }}</span>
-              </el-option>
+                </el-option>
               </el-select>
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="生成信息" name="genInfo">
-        <gen-info-form ref="genInfo" :info="info" :tables="tables" :menus="menus"/>
+        <gen-info-form ref="genInfo" :info="info" :tables="tables" :menus="menus" />
       </el-tab-pane>
     </el-tabs>
     <el-form label-width="100px">
@@ -213,12 +213,12 @@ export default {
     /** 关闭按钮 */
     close() {
       this.$store.dispatch("tagsView/delView", this.$route);
-      this.$router.push({ path: "/tool/gen", query: { t: Date.now()}})
+      this.$router.push({ path: "/tool/gen", query: { t: Date.now() } })
     }
   },
   mounted() {
     const el = this.$refs.dragTable.$el.querySelectorAll(".el-table__body-wrapper > table > tbody")[0];
-    const sortable = Sortable.create(el, {
+    Sortable.create(el, {
       handle: ".allowDrag",
       onEnd: evt => {
         const targetRow = this.cloumns.splice(evt.oldIndex, 1)[0];

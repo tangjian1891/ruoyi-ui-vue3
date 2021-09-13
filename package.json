@@ -14,7 +14,7 @@
     "clipboard": "^2.0.8",
     "core-js": "^3.8.3",
     "echarts": "^5.1.2",
-    "element-plus": "1.0.2-beta.65",
+    "element-plus": "1.1.0-beta.9",
     "file-saver": "^2.0.5",
     "fuse.js": "^6.4.6",
     "js-beautify": "^1.14.0",

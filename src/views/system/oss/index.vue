@@ -121,7 +121,7 @@
           v-hasPermi="['system:oss:list']"
         >配置管理</el-button>
       </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+      <RightToolbar v-model:showSearch="showSearch" @queryTable="getList"></RightToolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="ossList" @selection-change="handleSelectionChange">

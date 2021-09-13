@@ -13,7 +13,7 @@
     </template>
 
     <!-- 顶部菜单超出数量折叠 -->
-    <el-submenu :style="{ '--theme': theme }" index="more" v-if="topMenus.length > visibleNumber">
+    <el-sub-menu :style="{ '--theme': theme }" index="more" v-if="topMenus.length > visibleNumber">
       <template v-slot:title>更多菜单</template>
       <template v-for="(item, index) in topMenus">
         <el-menu-item :index="item.path" :key="index" v-if="index >= visibleNumber">
@@ -21,7 +21,7 @@
           {{ item.meta.title }}
         </el-menu-item>
       </template>
-    </el-submenu>
+    </el-sub-menu>
   </el-menu>
 </template>
 
@@ -200,13 +200,13 @@ export default {
 }
 
 .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
-.el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
+.el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title {
   border-bottom: 2px solid #{"var(--theme)"} !important;
   color: #303133;
 }
 
 /* submenu item */
-.topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title {
+.topmenu-container.el-menu--horizontal > .el-sub-menu .el-submenu__title {
   float: left;
   height: 50px !important;
   line-height: 50px !important;

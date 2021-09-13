@@ -75,7 +75,7 @@
           v-hasPermi="['system:oss:remove']"
         >删除</el-button>
       </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
+      <RightToolbar v-model:showSearch="showSearch" @queryTable="getList"></RightToolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="ossConfigList" @selection-change="handleSelectionChange">

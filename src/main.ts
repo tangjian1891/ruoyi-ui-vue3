@@ -8,14 +8,15 @@ import { getConfigKey } from "@/api/system/config";
 import { getDicts } from "@/api/system/dict/data";
 import directives from './directive'
 import SvgIcon from './components/SvgIcon/index.vue'
-import "element-plus/lib/theme-chalk/index.css";
+import "element-plus/theme-chalk/index.css";
 
 import '@/assets/styles/index.scss' // global css
 import '@/assets/styles/ruoyi.scss' // ruoyi css
 
 
 import Pagination from "@/components/Pagination/index.vue";
-
+// 自定义表格工具组件
+import RightToolbar from "@/components/RightToolbar/index.vue"
 const app = createApp(App);
 app.use(ElementPlus);
 
@@ -44,6 +45,7 @@ app.config.globalProperties.msgInfo = function (msg) {
 }
 app.component('svg-icon', SvgIcon)//全局icon
 app.component('pagination',Pagination)
+app.component('RightToolbar',RightToolbar)
 const req = require.context('./assets/icons/svg', false, /\.svg$/)
 const requireAll = requireContext => requireContext.keys().map(requireContext)
 requireAll(req)
