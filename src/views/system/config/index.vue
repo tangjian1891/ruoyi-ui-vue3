@@ -56,7 +56,8 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+      <el-col :span="20">
+        <el-col :span="1.5">
         <el-button
           type="primary"
           plain
@@ -108,6 +109,7 @@
           @click="handleRefreshCache"
           v-hasPermi="['system:config:remove']"
         >刷新缓存</el-button>
+      </el-col>
       </el-col>
       <RightToolbar v-model:showSearch="showSearch" @queryTable="getList"></RightToolbar>
     </el-row>

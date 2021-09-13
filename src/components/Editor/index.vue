@@ -10,14 +10,14 @@
       :headers="headers"
       style="display: none"
       ref="upload"
-      v-if="this.type == 'url'"
+      v-if="type == 'url'"
     >
     </el-upload>
     <div class="editor" ref="editor" :style="styles"></div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Quill from "quill";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
@@ -92,7 +92,7 @@ export default {
   },
   computed: {
     styles() {
-      let style = {};
+      let style :any= {};
       if (this.minHeight) {
         style.minHeight = `${this.minHeight}px`;
       }

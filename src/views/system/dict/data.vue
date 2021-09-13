@@ -96,7 +96,7 @@
       <el-table-column label="字典排序" align="center" prop="dictSort" />
       <el-table-column label="状态" align="center" prop="status">
         <template v-slot="scope">
-          <dict-tag :options="statusOptions" :value="scope.row.status"/>
+          <DictTag :options="statusOptions" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
