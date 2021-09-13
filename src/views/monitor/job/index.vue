@@ -142,34 +142,32 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['monitor:job:remove']"
           >删除</el-button>
-          <el-dropdown
-            size="mini"
-            @command="(command) => handleCommand(command, scope.row)"
-            v-hasPermi="['monitor:job:changeStatus', 'monitor:job:query']"
-          >
-            <span class="el-dropdown-link">
-              <i class="el-icon-d-arrow-right el-icon--right"></i>更多
-            </span>
-            <template v-slot:dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item
-                  command="handleRun"
-                  icon="el-icon-caret-right"
-                  v-hasPermi="['monitor:job:changeStatus']"
-                >执行一次</el-dropdown-item>
-                <el-dropdown-item
-                  command="handleView"
-                  icon="el-icon-view"
-                  v-hasPermi="['monitor:job:query']"
-                >任务详细</el-dropdown-item>
-                <el-dropdown-item
-                  command="handleJobLog"
-                  icon="el-icon-s-operation"
-                  v-hasPermi="['monitor:job:query']"
-                >调度日志</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
+          <template v-hasPermi="['monitor:job:changeStatus', 'monitor:job:query']">
+            <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)">
+              <span class="el-dropdown-link">
+                <i class="el-icon-d-arrow-right el-icon--right"></i>更多
+              </span>
+              <template v-slot:dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    command="handleRun"
+                    icon="el-icon-caret-right"
+                    v-hasPermi="['monitor:job:changeStatus']"
+                  >执行一次</el-dropdown-item>
+                  <el-dropdown-item
+                    command="handleView"
+                    icon="el-icon-view"
+                    v-hasPermi="['monitor:job:query']"
+                  >任务详细</el-dropdown-item>
+                  <el-dropdown-item
+                    command="handleJobLog"
+                    icon="el-icon-s-operation"
+                    v-hasPermi="['monitor:job:query']"
+                  >调度日志</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -183,7 +181,7 @@
     />
 
     <!-- 添加或修改定时任务对话框 -->
-    <el-dialog :title="title" v-model:visible="open" width="700px" append-to-body>
+    <el-dialog :title="title" v-model="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="12">
@@ -267,7 +265,7 @@
     </el-dialog>
 
     <!-- 任务日志详细 -->
-    <el-dialog title="任务详细" v-model:visible="openView" width="700px" append-to-body>
+    <el-dialog title="任务详细" v-model="openView" width="700px" append-to-body>
       <el-form ref="form" :model="form" label-width="120px" size="mini">
         <el-row>
           <el-col :span="12">

@@ -71,55 +71,57 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleFile"
-          v-hasPermi="['system:oss:upload']"
-        >上传文件</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleImage"
-          v-hasPermi="['system:oss:upload']"
-        >上传图片</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:oss:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          :type="previewListResource ? 'danger' : 'warning'"
-          plain
-          size="mini"
-          @click="handlePreviewListResource(!previewListResource)"
-          v-hasPermi="['system:oss:edit']"
-        >预览开关 : {{ previewListResource ? "禁用" : "启用" }}</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="info"
-          plain
-          icon="el-icon-s-operation"
-          size="mini"
-          @click="handleOssConfig"
-          v-hasPermi="['system:oss:list']"
-        >配置管理</el-button>
+      <el-col :span="20">
+        <el-col :span="1.5">
+          <el-button
+            type="primary"
+            plain
+            icon="el-icon-plus"
+            size="mini"
+            @click="handleFile"
+            v-hasPermi="['system:oss:upload']"
+          >上传文件</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="primary"
+            plain
+            icon="el-icon-plus"
+            size="mini"
+            @click="handleImage"
+            v-hasPermi="['system:oss:upload']"
+          >上传图片</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            size="mini"
+            :disabled="multiple"
+            @click="handleDelete"
+            v-hasPermi="['system:oss:remove']"
+          >删除</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            :type="previewListResource ? 'danger' : 'warning'"
+            plain
+            size="mini"
+            @click="handlePreviewListResource(!previewListResource)"
+            v-hasPermi="['system:oss:edit']"
+          >预览开关 : {{ previewListResource ? "禁用" : "启用" }}</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="info"
+            plain
+            icon="el-icon-s-operation"
+            size="mini"
+            @click="handleOssConfig"
+            v-hasPermi="['system:oss:list']"
+          >配置管理</el-button>
+        </el-col>
       </el-col>
       <RightToolbar v-model:showSearch="showSearch" @queryTable="getList"></RightToolbar>
     </el-row>
@@ -183,8 +185,8 @@
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="文件名">
-          <fileUpload v-model="form.file" v-if="type === 0" />
-          <imageUpload v-model="form.file" v-if="type === 1" />
+          <FileUpload v-model="form.file" v-if="type === 0" />
+          <ImageUpload v-model="form.file" v-if="type === 1" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -197,7 +199,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { listOss, delOss, changePreviewListResource } from "@/api/system/oss";
 import { downLoadOss } from "@/utils/download";
 

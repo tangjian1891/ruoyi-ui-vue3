@@ -20,6 +20,10 @@ import RightToolbar from "@/components/RightToolbar/index.vue";
 import DictTag from "@/components/DictTag/index.vue";
 // 富文本组件
 import Editor from "@/components/Editor/index.vue"
+// 文件上传组件
+import FileUpload from "@/components/FileUpload/index.vue"
+// 图片上传组件
+import ImageUpload from "@/components/ImageUpload/index.vue"
 const app = createApp(App);
 app.use(ElementPlus);
 
@@ -49,6 +53,8 @@ app.component("pagination", Pagination);
 app.component("RightToolbar", RightToolbar);
 app.component("DictTag", DictTag);
 app.component("Editor", Editor);
+app.component("FileUpload", FileUpload);
+app.component("ImageUpload", ImageUpload);
 const req = require.context("./assets/icons/svg", false, /\.svg$/);
 const requireAll = requireContext => requireContext.keys().map(requireContext);
 requireAll(req);
