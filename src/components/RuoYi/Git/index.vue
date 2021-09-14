@@ -9,7 +9,7 @@ export default {
   name: 'RuoYiGit',
   data() {
     return {
-      url: 'https://gitee.com/JavaLionLi/RuoYi-Vue-Plus'
+      url: 'https://gitee.com/JavaLionLi/RuoYi-Vue3-Plus'
     }
   },
   methods: {

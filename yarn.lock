@@ -3274,13 +3274,13 @@ easy-stack@^1.0.1:
   resolved "https://registry.yarnpkg.com/easy-stack/-/easy-stack-1.0.1.tgz#8afe4264626988cabb11f3c704ccd0c835411066"
   integrity sha512-wK2sCs4feiiJeFXn3zvY0p41mdU5VUgbgs1rNsc/y5ngFUijdWd+iIN8eoyuZHKB8xN6BL4PdWmzqFmxNg6V2w==
 
-echarts@^5.1.2:
-  version "5.1.2"
-  resolved "https://registry.nlark.com/echarts/download/echarts-5.1.2.tgz#aa1ab0cef5b74fa2f7c620261a5f286893d30fd1"
-  integrity sha1-qhqwzvW3T6L3xiAmGl8oaJPTD9E=
+echarts@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.nlark.com/echarts/download/echarts-5.2.0.tgz?cache=0&sync_timestamp=1630472437863&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fecharts%2Fdownload%2Fecharts-5.2.0.tgz#9f1fbfbf048c15ab630bf0a74525c4c534d6cebc"
+  integrity sha1-nx+/vwSMFatjC/CnRSXExTTWzrw=
   dependencies:
-    tslib "2.0.3"
-    zrender "5.1.1"
+    tslib "2.3.0"
+    zrender "5.2.0"
 
 editorconfig@^0.15.3:
   version "0.15.3"
@@ -7573,10 +7573,10 @@ ts-loader@^8.0.17:
     micromatch "^4.0.0"
     semver "^7.3.4"
 
-tslib@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.nlark.com/tslib/download/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
-  integrity sha1-jgdBrEX8DCJuWKF7/D5kubxsphw=
+tslib@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.nlark.com/tslib/download/tslib-2.3.0.tgz?cache=0&sync_timestamp=1628722580350&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+  integrity sha1-gDuM2rPhK6WBpMpByIObuw2ssJ4=
 
 tslib@^1.8.1:
   version "1.14.1"
@@ -8207,9 +8207,9 @@ yorkie@^2.0.0:
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
 
-zrender@5.1.1:
-  version "5.1.1"
-  resolved "https://registry.nlark.com/zrender/download/zrender-5.1.1.tgz?cache=0&sync_timestamp=1630140946374&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fzrender%2Fdownload%2Fzrender-5.1.1.tgz#0515f4f8cc0f4742f02a6b8819550a6d13d64c5c"
-  integrity sha1-BRX0+MwPR0LwKmuIGVUKbRPWTFw=
+zrender@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.nlark.com/zrender/download/zrender-5.2.0.tgz?cache=0&sync_timestamp=1630140927144&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fzrender%2Fdownload%2Fzrender-5.2.0.tgz#f8abc484ac4a8a51b04c3ccd37beabe1def342cd"
+  integrity sha1-+KvEhKxKilGwTDzNN76r4d7zQs0=
   dependencies:
-    tslib "2.0.3"
+    tslib "2.3.0"

@@ -2,7 +2,7 @@
   <div class="app-container home">
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
-        <h2>RuoYi-Vue-Plus后台管理框架</h2>
+        <h2>RuoYi-Vue3-Plus后台管理框架</h2>
         <p>
           基于 RuoYi-Vue 集成 Mybatis-Plus Lombok Hutool 等便捷开发工具 适配重写相关业务 便于开发 定期与 RuoYi-Vue 同步
           <br />* 前端开发框架 Vue、Element UI
@@ -38,14 +38,14 @@
             size="mini"
             icon="el-icon-cloudy"
             plain
-            @click="goTarget('https://gitee.com/JavaLionLi/RuoYi-Vue-Plus')"
+            @click="goTarget('https://gitee.com/JavaLionLi/RuoYi-Vue3-Plus')"
           >访问码云</el-button>
           <el-button
             type="primary"
             size="mini"
             icon="el-icon-cloudy"
             plain
-            @click="goTarget('https://github.com/JavaLionLi/RuoYi-Vue-Plus')"
+            @click="goTarget('https://github.com/JavaLionLi/RuoYi-Vue3-Plus')"
           >访问GitHub</el-button>
         </p>
       </el-col>
@@ -359,7 +359,7 @@
             </el-collapse-item>
             <el-collapse-item title="v1.0.0 - 2021-5-10">
               <ol>
-                <li>RuoYi-Vue-Plus 后台管理系统正式发布</li>
+                <li>RuoYi-Vue3-Plus 后台管理系统正式发布</li>
                 <li>ORM框架 使用 Mybatis-Plus 3.4.2 简化CRUD</li>
                 <li>Bean简化 使用 Lombok 简化 get set toString 等等</li>
                 <li>容器改动 Tomcat 改为 并发性能更好的 undertow</li>

@@ -130,9 +130,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { getCache } from "@/api/monitor/cache";
-import echarts from "echarts";
+import * as echarts from "echarts";
 
 export default {
   name: "Server",
@@ -158,7 +158,9 @@ export default {
       getCache().then((response) => {
         this.cache = response.data;
         this.loading.close();
-
+        console.log(this.$refs)
+        console.log(this.$refs.commandstats)
+        console.log(echarts)
         this.commandstats = echarts.init(this.$refs.commandstats, "macarons");
         this.commandstats.setOption({
           tooltip: {
