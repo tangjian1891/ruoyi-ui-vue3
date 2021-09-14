@@ -65,7 +65,7 @@ import { computed } from '@vue/reactivity'
 import { getCurrentInstance } from '@vue/runtime-core'
 const store = useStore()
 const { sidebar, avatar, device } = store.getters
-const { proxy } = getCurrentInstance()
+const { proxy }:any = getCurrentInstance()
 const setting = computed({
   get() {
     return store.state.settings.showSettings

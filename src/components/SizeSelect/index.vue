@@ -72,7 +72,6 @@ export default {
   height: 100%;
   font-size: 18px;
   color: #5a5e66;
-  transform: translateY(-15px);
   // vertical-align: middle;
 
   &.hover-effect {
