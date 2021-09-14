@@ -9,6 +9,7 @@ https://v3.vuejs.org/guide/migration/emits-option.html#_3-x-behavior   新的emi
 7.插槽。vue3使用vue2.6全新插槽语法，旧的语法已被移除 https://cn.vuejs.org/v2/guide/components-slots.html
 8.事件出事this.$emit()调整。 https://v3.vuejs.org/api/sfc-script-setup.html#defineprops-and-defineemits 配合6移除native阅读
 9.css module值得使用。可以替换webpack4的scss变量:export导出方式。 文档地址:https://v3.vuejs.org/api/sfc-style.html#style-module
+
 10.vue2挂载到原型的。现在挂载为 app.config.globalProperties上.调用方式  internalInstance.appContext.config.globalProperties 为 https://v3.vuejs.org/api/composition-api.html#getcurrentinstance   还有一种为internalInstance.proxy   
 https://juejin.cn/post/6911883529098002446  getCurrentInstance
 

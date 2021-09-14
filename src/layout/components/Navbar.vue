@@ -26,8 +26,6 @@
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <SizeSelect class="right-menu-item hover-effect" />
         </el-tooltip>
-
-    
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -64,9 +62,10 @@ import HeaderSearch from '@/components/HeaderSearch/index.vue'
 import RuoYiGit from '@/components/RuoYi/Git/index.vue'
 import RuoYiDoc from '@/components/RuoYi/Doc/index.vue'
 import { computed } from '@vue/reactivity'
+import { getCurrentInstance } from '@vue/runtime-core'
 const store = useStore()
 const { sidebar, avatar, device } = store.getters
-
+const { proxy } = getCurrentInstance()
 const setting = computed({
   get() {
     return store.state.settings.showSettings
@@ -89,12 +88,13 @@ function toggleSideBar() {
 }
 
 function logout() {
-  this.$confirm('确定注销并退出系统吗？', '提示', {
+  console.log(proxy)
+  proxy.$confirm('确定注销并退出系统吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    this.$store.dispatch('LogOut').then(() => {
+    store.dispatch('LogOut').then(() => {
       location.href = '/index';
     })
   })
