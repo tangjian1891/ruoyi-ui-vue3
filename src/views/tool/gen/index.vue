@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px"
+    >
       <el-form-item label="表名称" prop="tableName">
         <el-input
           v-model="queryParams.tableName"
@@ -38,47 +44,49 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleGenTable"
-          v-hasPermi="['tool:gen:code']"
-        >生成</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="info"
-          plain
-          icon="el-icon-upload"
-          size="mini"
-          @click="openImportTable"
-          v-hasPermi="['tool:gen:import']"
-        >导入</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleEditTable"
-          v-hasPermi="['tool:gen:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['tool:gen:remove']"
-        >删除</el-button>
+      <el-col :span="20">
+        <el-col :span="1.5">
+          <el-button
+            type="primary"
+            plain
+            icon="el-icon-download"
+            size="mini"
+            @click="handleGenTable"
+            v-hasPermi="['tool:gen:code']"
+          >生成</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="info"
+            plain
+            icon="el-icon-upload"
+            size="mini"
+            @click="openImportTable"
+            v-hasPermi="['tool:gen:import']"
+          >导入</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="success"
+            plain
+            icon="el-icon-edit"
+            size="mini"
+            :disabled="single"
+            @click="handleEditTable"
+            v-hasPermi="['tool:gen:edit']"
+          >修改</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button
+            type="danger"
+            plain
+            icon="el-icon-delete"
+            size="mini"
+            :disabled="multiple"
+            @click="handleDelete"
+            v-hasPermi="['tool:gen:remove']"
+          >删除</el-button>
+        </el-col>
       </el-col>
       <RightToolbar v-model:showSearch="showSearch" @queryTable="getList"></RightToolbar>
     </el-row>
@@ -86,8 +94,8 @@
     <el-table v-loading="loading" :data="tableList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" width="55"></el-table-column>
       <el-table-column label="序号" type="index" width="50" align="center">
-        <template #default="scope" >
-          <span>{{(queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1}}</span>
+        <template #default="scope">
+          <span>{{ (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -114,7 +122,7 @@
       <el-table-column label="创建时间" align="center" prop="createTime" width="160" />
       <el-table-column label="更新时间" align="center" prop="updateTime" width="160" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template #default="scope" >
+        <template #default="scope">
           <el-button
             type="text"
             size="small"
@@ -154,7 +162,7 @@
       </el-table-column>
     </el-table>
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       v-model:page="queryParams.pageNum"
       v-model:limit="queryParams.pageSize"
@@ -165,11 +173,11 @@
       <el-tabs v-model="preview.activeName">
         <el-tab-pane
           v-for="(value, key) in preview.data"
-          :label="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
-          :name="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
+          :label="key.substring(key.lastIndexOf('/') + 1, key.indexOf('.vm'))"
+          :name="key.substring(key.lastIndexOf('/') + 1, key.indexOf('.vm'))"
           :key="key"
         >
-        <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
+          <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -177,12 +185,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { listTable, previewTable, delTable, genCode, synchDb } from "@/api/tool/gen";
-import importTable from "./importTable";
+import importTable from "./importTable.vue";
 import { downLoadZip } from "@/utils/download";
-import hljs from "highlight.js/lib/highlight";
-import "highlight.js/styles/github-gist.css";
+// import hljs from "highlight.js";
+import hljs from 'highlight.js/lib/core';
+import "highlight.js/styles/github.css";
 hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
 hljs.registerLanguage("xml", require("highlight.js/lib/languages/xml"));
 hljs.registerLanguage("html", require("highlight.js/lib/languages/xml"));
@@ -246,10 +255,10 @@ export default {
     getList() {
       this.loading = true;
       listTable(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.tableList = response.rows;
-          this.total = response.total;
-          this.loading = false;
-        }
+        this.tableList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      }
       );
     },
     /** 搜索按钮操作 */
@@ -264,8 +273,8 @@ export default {
         this.msgError("请选择要生成的数据");
         return;
       }
-      if(row.genType === "1") {
-        genCode(row.tableName).then( () => {
+      if (row.genType === "1") {
+        genCode(row.tableName).then(() => {
           this.msgSuccess("成功生成到自定义路径：" + row.genPath);
         });
       } else {
@@ -279,10 +288,10 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(function() {
-          return synchDb(tableName);
+      }).then(function () {
+        return synchDb(tableName);
       }).then(() => {
-          this.msgSuccess("同步成功");
+        this.msgSuccess("同步成功");
       });
     },
     /** 打开导入表弹窗 */
@@ -328,11 +337,11 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(function() {
-          return delTable(tableIds);
+      }).then(function () {
+        return delTable(tableIds);
       }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
+        this.getList();
+        this.msgSuccess("删除成功");
       });
     }
   }

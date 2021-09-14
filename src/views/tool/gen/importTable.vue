@@ -1,6 +1,6 @@
 <template>
   <!-- 导入表 -->
-  <el-dialog title="导入表" v-model="visible" width="800px" top="5vh" append-to-body>
+  <el-dialog title="导入表" v-model="visible" width="800px" append-to-body>
     <el-form :model="queryParams" ref="queryForm" :inline="true">
       <el-form-item label="表名称" prop="tableName">
         <el-input
@@ -39,13 +39,17 @@
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column prop="updateTime" label="更新时间"></el-table-column>
       </el-table>
-      <pagination
-        v-show="total > 0"
-        :total="total"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        @pagination="getList"
-      />
+    </el-row>
+    <el-row>
+      <el-col>
+        <pagination
+          v-show="total > 0"
+          :total="total"
+          v-model:page="queryParams.pageNum"
+          v-model:limit="queryParams.pageSize"
+          @pagination="getList"
+        />
+      </el-col>
     </el-row>
     <template #footer>
       <div class="dialog-footer">
@@ -56,9 +60,10 @@
   </el-dialog>
 </template>
 
-<script>
+<script lang="ts">
 import { listDbTable, importTable } from "@/api/tool/gen";
 export default {
+  emits: ['ok'],
   data() {
     return {
       // 遮罩层
