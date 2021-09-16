@@ -30,7 +30,7 @@
     </el-row>
   </el-form>
 </template>
-<script>
+<script lang="ts">
 export default {
   name: "BasicInfoForm",
   props: {

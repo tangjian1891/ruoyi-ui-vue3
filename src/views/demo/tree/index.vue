@@ -114,8 +114,8 @@
 
 <script lang="ts">
 import { listTree, getTree, delTree, addTree, updateTree } from "@/api/demo/tree";
-import Treeselect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import Treeselect from "vue3-treeselect";
+import "vue3-treeselect/dist/vue3-treeselect.css";
 
 export default {
   name: "Tree",

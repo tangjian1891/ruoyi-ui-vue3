@@ -29,7 +29,7 @@
       <el-col :span="12">
         <el-form-item prop="moduleName">
           <template #label>
-            <span  >
+            <span>
               生成模块名
               <el-tooltip content="可理解为子系统名，例如 system" placement="top">
                 <i class="el-icon-question"></i>
@@ -68,7 +68,7 @@
         </el-form-item>
       </el-col>
 
-      <el-col :span="12">
+      <el-col :span="12" v-if="info && menus.length > 0">
         <el-form-item>
           <template #label>
             <span>
@@ -78,14 +78,18 @@
               </el-tooltip>
             </span>
           </template>
-          <treeselect
-            :append-to-body="true"
-            v-model="info.parentMenuId"
-            :options="menus"
-            :normalizer="normalizer"
-            :show-count="true"
-            placeholder="请选择系统菜单"
-          />
+
+          <template>
+            <!-- <Treeselect
+              :append-to-body="true"
+              v-model="info.parentMenuId"
+              :options="menus"
+              :normalizer="normalizer"
+              :show-count="true"
+              placeholder="请选择系统菜单"
+            /> -->
+          
+          </template>
         </el-form-item>
       </el-col>
 
@@ -103,6 +107,7 @@
           <el-radio v-model="info.genType" label="1">自定义路径</el-radio>
         </el-form-item>
       </el-col>
+        <Treeselect  v-model="value" :multiple="true" :options="options"></Treeselect>
 
       <el-col :span="24" v-if="info.genType == '1'">
         <el-form-item prop="genPath">
@@ -196,6 +201,7 @@
         </el-form-item>
       </el-col>
     </el-row>
+
     <el-row v-show="info.tplCategory == 'sub'">
       <h4 class="form-header">关联信息</h4>
       <el-col :span="12">
@@ -241,12 +247,14 @@
     </el-row>
   </el-form>
 </template>
-<script>
-import Treeselect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-
+<script lang="ts">
+// import Treeselect from "@riophae/vue-treeselect";
+// import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import Treeselect from "vue3-treeselect";
+import "vue3-treeselect/dist/vue3-treeselect.css";
+console.log('查看一下', Treeselect)
 export default {
-  name: "BasicInfoForm",
+  name: "genInfoForm",
   components: { Treeselect },
   props: {
     info: {
@@ -259,11 +267,30 @@ export default {
     },
     menus: {
       type: Array,
-      default: ()=>[]
+      default: () => []
     },
   },
   data() {
     return {
+      value:null,
+        // define options
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+          }, {
+            id: 'ab',
+            label: 'ab',
+          } ],
+        }, {
+          id: 'b',
+          label: 'b',
+        }, {
+          id: 'c',
+          label: 'c',
+        } ],
       subColumns: [],
       rules: {
         tplCategory: [

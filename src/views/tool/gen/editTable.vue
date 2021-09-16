@@ -142,7 +142,8 @@ export default {
   data() {
     return {
       // 选中选项卡的 name
-      activeName: "cloum",
+      // activeName: "cloum",
+      activeName: "genInfo",
       // 表格的高度
       tableHeight: document.documentElement.scrollHeight - 245 + "px",
       // 表信息

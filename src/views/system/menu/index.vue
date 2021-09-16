@@ -252,8 +252,8 @@
 
 <script lang="ts">
 import { listMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/system/menu";
-import Treeselect from "@riophae/vue-treeselect";
-import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import Treeselect from "vue3-treeselect";
+import "vue3-treeselect/dist/vue3-treeselect.css";
 import IconSelect from "@/components/IconSelect/index.vue";
 
 export default {
