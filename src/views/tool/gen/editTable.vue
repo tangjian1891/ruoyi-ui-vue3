@@ -114,7 +114,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="生成信息" name="genInfo">
-        <gen-info-form ref="genInfo" :info="info" :tables="tables" :menus="menus" />
+        <GenInfoForm ref="genInfo" :info="info" :tables="tables" :menus="menus" />
       </el-tab-pane>
     </el-tabs>
     <el-form label-width="100px">
@@ -125,19 +125,20 @@
     </el-form>
   </el-card>
 </template>
+ 
 <script lang="ts">
 import { getGenTable, updateGenTable } from "@/api/tool/gen";
 import { optionselect as getDictOptionselect } from "@/api/system/dict/type";
 import { listMenu as getMenuTreeselect } from "@/api/system/menu";
 import basicInfoForm from "./basicInfoForm.vue";
-import genInfoForm from "./genInfoForm.vue";
+import GenInfoForm from "./genInfoForm.vue";
 import Sortable from 'sortablejs'
 
 export default {
-  name: "GenEdit",
+  name: "EditTable",
   components: {
     basicInfoForm,
-    genInfoForm
+    GenInfoForm
   },
   data() {
     return {
@@ -191,7 +192,8 @@ export default {
             treeCode: genTable.treeCode,
             treeName: genTable.treeName,
             treeParentCode: genTable.treeParentCode,
-            parentMenuId: genTable.parentMenuId
+            parentMenuId: genTable.parentMenuId,
+            parentMenuName: genTable.parentMenuName
           };
           updateGenTable(genTable).then(res => {
             this.msgSuccess(res.msg);
